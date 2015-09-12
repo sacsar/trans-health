@@ -10,6 +10,9 @@ setup(
     setup_requires=["nose>=1.0"],
     install_requires=[
         "coverage",
-        "spec"
+        "spec",
+        "flask",
+        "SQLAlchemy",
+        "nose"
     ]
 )
