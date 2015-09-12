@@ -29,5 +29,36 @@
                 "no": 10
             }]
         }
+    },
+    {
+        "state": "IL",
+        "company": "Insurance B",
+        "plan": "Basic Plan",
+        "exchange": "Catastrophic",
+        "medicaid": false,
+        "coverage": {
+            "hormones": {
+                "yes": 3,
+                "no": 2,
+                "unknown": 50
+            },
+            "surgery": {
+                "yes": 3,
+                "no": 2,
+                "unknown": 50
+            }
+        },
+        "claims": {
+            "hormones": [{
+                "name": "hormone 1",
+                "yes": 5,
+                "no": 10
+            }],
+            "surgery": [{
+                "name": "surgery 1",
+                "yes": 5,
+                "no": 10
+            }]
+        }
     }
 ]
