@@ -59,6 +59,7 @@ def post_plan():
 @app.route('/api/v1/search/<state>')
 @app.route('/api/v1/search/<state>/<dimension>/<value>')
 def search_plan(state, dimension=None, value=None):
+    results = []
     query = g.db.query(database.Plan).filter(database.Plan.state == state)
     if dimension == 'company':
         company = company_by_name(g.db, value)
@@ -70,7 +71,10 @@ def search_plan(state, dimension=None, value=None):
         # looking for plans where someone has reported coverage
         results = []
     elif dimension == 'exchange':
-        results = query.filter(database.Plan.color_code != 'not-present').all()
+        query = query.filter(database.Plan.color_code != 'not-present')
+        results = query.all()
+    elif dimension is None:
+        results = query.all()
     return jsonify({'plans': results})
 
 @app.route('/api/v1/companies')
