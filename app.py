@@ -28,30 +28,44 @@ def post_plan():
 	data = request.get_json()
 	# check if the plan exists
 	add = True
-	# lookup company
-	company = g.db.query(database.Company).filter(Company.name == data['name']).all()
-	if company == []:
-		# need to make a new company
-		pass
-	else:
-		company = company[0]
 	if add:
-		plan = database.Plan(state=data['state'],
-							 type=data['type'],
-							 exclusions=data['exclusions'],
-							 company=company)
-		g.db.add(plan)
-		g.db.commit()
+		# lookup company
+		company = company_by_name(data['company'])
+		if company is None:
+			# add the company
+			g.db.add(database.Company(name=name))
+			plan = database.Plan(state=data['state'],
+								 type=data['type'],
+								 exclusions=data['exclusions'],
+								 company=company)
+			g.db.add(plan)
+			g.db.commit()
 
 @app.route('/api/v1/search/<state>')
 @app.route('/api/v1/search/<state>/<dimension>/<value>')
-def search_plan(state, dimension, value):
-	pass
+def search_plan(state, dimension=None, value=None):
+	query = g.db.query(database.Plan).filter(database.Plan.state = state)
+	if dimension == 'company':
+		company = company_by_name(g.db, value)
+		if company is None:
+			results = []
+		else:
+			results = company.plans
+	elif dimension == 'procedure':
+		# looking for plans where someone has reported coverage
+		results = []
+	elif dimension == 'exchange':
+		results = query.filter(database.Plan.color_code != 'not-present').all()
+	return jsonify({'plans': results})
 
 @app.route('/api/v1/companies')
 def company_list():
 	companies = g.db.query(database.Company).all()
-	return jsonify({'companies': companies})
+	return jsonify({'companies': [c.name for c in companies]})
+
+def company_by_name(session, name):
+	company = g.db.query(database.Company).filter(Company.name == name)
+	return company[0] if len(company) > 0 else None
 
 if __name__ == '__main__':
 	app.run(debug=True)
