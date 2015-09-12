@@ -1,0 +1,8 @@
+<div class="row">
+
+    <div data-ng-repeat="result in results | filter: state | filter: search"  class="results--item col-xs-12 col-md-8">
+        <h3>{{ result.company }} {{ result.plan }}</h3>
+        <small class="results--tag">{{ result.state }}</small><small data-ng-repeat="tag in result.tags" class="results--tag">{{ tag }}</small>
+    </div>
+
+</div>

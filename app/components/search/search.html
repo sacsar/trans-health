@@ -60,12 +60,12 @@
         </div>
         
         <div class="form-group col-sx-12 col-sm-6">
-            <label for="search">Company, plan, or procedure name</label>
-            <input type="search" id="search" class="form-control" data-ng-model="search"/>
+            <label for="query">Company, plan, or procedure name</label>
+            <input type="search" id="query" class="form-control" data-ng-model="query"/>
         </div>
         
         <div class="form-group col-sx-12 col-sm-3">
-            <button class="btn btn__primary search--button col-xs-12" data-ng-click="getPlans()">Search</button>
+            <button class="btn btn__primary search--button col-xs-12" data-ng-click="search(state, query)">Search</button>
         </div>
 <!--
         <div class="checkbox col-xs-12 col-sm-3">
@@ -80,10 +80,5 @@
         </div>
 -->
     </form>
-    
-    <div data-ng-repeat="result in results | filter: state | filter: search"  class="results--item col-xs-12 col-md-8">
-        <h3>{{ result.company }} {{ result.plan }}</h3>
-        <small class="results--tag">{{ result.state }}</small><small data-ng-repeat="tag in result.tags" class="results--tag">{{ tag }}</small>
-    </div>
 </div>
 
