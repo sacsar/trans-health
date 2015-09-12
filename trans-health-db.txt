@@ -10,3 +10,42 @@
     *   Exclusions
     *   Formulary
     *   Coverage limits (when they only pay $5 for surgery)
+
+
+----
+
+Medications
+===========
+*   cyproterone
+*   spironolactone
+*   finasteride
+*   estradiol
+*   progesterone
+*   testosterone
+*   GnRH analogue
+
+Delivery Methods for Medications
+================================
+*   pill
+*   transdermal
+*   injectable
+*   implanted
+*   long-lasting injection
+
+Surgeries
+=========
+*   Facial Feminization
+*   Mastectomy
+*   Phalloplasty
+*   Vaginaplasty
+*   Labiaplasty
+*   Breast Augmentation
+*   Orchiectomy
+*   Hystorectomy
+*   Oophorectomy
+*   Metoidioplasty
+
+Others
+======
+*   Therapy/Counselling
+*   Voice Retraining
