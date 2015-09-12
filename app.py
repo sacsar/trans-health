@@ -20,8 +20,22 @@ def before_request():
 
 @app.route('/api/v1/experience', methods=['POST'])
 def post_experience():
-	experience_data = resquest.get_json()
+	data = resquest.get_json()
 	# need to look up plan and company
+	plan = plan_by_company_name(g.db,
+								data['company'],
+								data['plan'],
+								data['state'])
+	# there may be multiple procedures in one request
+	incidents = []
+	for procedure in data['procedures']:
+		incidents.append(database.Incident(date=data['date'],
+								 		   plan_id=plan.id,
+								 		   gender=data['gender'],
+								 		   procedure=procedure['name'],
+								 		   success=procedure['success'],
+								 		   age=data['age']))
+	g.db.add_all(incidents)
 
 @app.route('/api/v1/plan', methods=['POST'])
 def post_plan():
@@ -64,8 +78,14 @@ def company_list():
 	return jsonify({'companies': [c.name for c in companies]})
 
 def company_by_name(session, name):
-	company = g.db.query(database.Company).filter(Company.name == name)
+	company = session.query(database.Company).filter(Company.name == name)
 	return company[0] if len(company) > 0 else None
+
+def plan_by_company_name(session, company, plan_name, state):
+	company = company_by_name(session, company)
+	plan = [p for p in company.plans if p.state == state
+			and p.name == plan_name][0]
+	return plan
 
 if __name__ == '__main__':
 	app.run(debug=True)
