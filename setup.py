@@ -13,6 +13,7 @@ setup(
         "spec",
         "flask",
         "SQLAlchemy",
+        "requests",
         "nose"
     ]
 )

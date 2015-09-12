@@ -95,8 +95,7 @@ Endpoints
 ---------
 *   POST /api/v1/incident
 *   POST /api/v1/plan
-*   GET /api/v1/search/\<state\>/\<dimension\>/\<value\>, where dimension = [company, procedure, exchange (t/f), medicaid(t/f)]
-*   GET /api/v1/search/\<state\> all plans in a state
+*   GET /api/v1/search/<search_string> (search string is URL encoded JSON)
 
 API Data Structures
 -------------------
@@ -107,7 +106,7 @@ Report JSON:
       age:
       plan:
       company:
-      procedure: [ { name:
+      procedures: [ { name:
                      success:
                     }
                  ]
@@ -131,8 +130,15 @@ Plan Reponse:
       company:
       plan-name:
       type:
-
+      plan-document-available:
+      coverage-criteria-availabe:
+      formulary-available:
     }
+
+Search format:
+    { state:
+      dimension:
+      values: [ ]}
 
 Reports and Views
 =================
