@@ -1,0 +1,113 @@
+/* VARIABLES */
+$primary-color: #5bcefa;
+$secondary-color: #f5a9b8;
+
+@import 'utilities/mixins';
+
+.text {
+    &__primary {
+        color: $primary-color;
+    }
+    
+    &__secondary {
+        color: $secondary-color;
+    }
+}
+.header {
+    padding: .3em;
+    
+    background-color: $primary-color;
+    
+    &--title {
+        margin: 0;
+
+        font-size: 2em;
+
+        color: #FFF;
+    }
+    
+    &--link {
+        padding: .4em;
+        background-color: $secondary-color;
+        color: #FFF;
+        display: inline-block;
+        margin-right: .2em;
+        @include border-radius(.2em);
+
+        &:hover, &:active, &:focus {
+            background-color: lighten($secondary-color, 6%);
+            color: #FFF;
+            text-decoration: none;
+        }
+    }
+}
+
+
+.btn {
+    &__primary {
+        background-color: $primary-color;
+    }
+    
+    &__secondary {
+        background-color: $secondary-color;
+    }
+    
+}
+.search {
+    background-color: lighten($secondary-color, 15%);
+    padding: 1em;
+    overflow: hidden;
+    margin-top: 1em;
+    
+    /*&--check {
+        display: none;
+        
+        & + label {
+            font-weight: normal;
+            display: inline-block;
+            padding: .5em 0em;
+            background-color: $secondary-color;
+            opacity: .5;
+            margin-bottom: .2em;
+            @include border-radius(.3em);
+            
+            &::before {
+                content: '';
+                display: inline-block;
+                width: 1em;
+                height: 1em;
+                margin: 0 .5em;
+                font-family: 'Glyphicons Halflings';
+                font-size: .9em;
+            }
+        }
+        
+        &:checked + label {
+            opacity: 1;
+            &::before {
+                content: '\e013';
+            }
+            
+        }
+    }*/
+    
+    &--button{
+        margin-top: 1.7em;
+    }
+}
+
+.results{
+    &--item {
+        background-color: #FFF;
+        @include box-shadow (0 0 .2em lighten($primary-color, 20%));
+        margin-bottom: 1em;
+        padding: 2em;
+    }
+    
+    &--tag {
+        padding: .2em;
+        @include border-radius(.4em);
+        background-color: lighten($primary-color, 20%);
+        margin-left: .3em;
+    }
+}

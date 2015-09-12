@@ -1,0 +1,23 @@
+[
+    {
+        "plan": "Bronze Plan",
+        "company": "Insurance A",
+        "state": "TX",
+        "excluded": ["surgery 1", "hormone 1"],
+        "tags": ["medicaid"]
+    },
+    {
+        "plan": "Catastrophic Plan",
+        "company": "Insurance A",
+        "state": "TX",
+        "excluded": ["surgery 2", "hormone 2"],
+        "tags": ["exchange", "medicaid"]
+    },
+    {
+        "plan": "Bronze Plan",
+        "company": "Insurance B",
+        "state": "IL",
+        "excluded": ["surgery 1", "hormone 2"],
+        "tags": ["exchange"]
+    }
+]

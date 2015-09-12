@@ -1,0 +1,118 @@
+/*
+** DATE UPDATED:    08/12/2015
+** BY:              DIEGO HERNANDEZ
+*/
+
+@import 'functions';
+
+/* ====== LAYOUT ====== */
+@mixin box-sizing($sizing) {
+    -moz-box-sizing: $sizing;
+    -webkit-box-sizing: $sizing;
+    box-sizing: $sizing;
+}
+
+
+/* ====== STYLING ====== */
+    /* === GRADIENTS === */
+    @mixin linear-gradient($direction, $color-stops...) {
+        @if is-direction($direction) == false {
+            $color-stops: ($direction, $color-stops);
+            $direction: 180deg;
+        }
+
+        background: mix(nth(nth($color-stops, 1), 1), nth(nth($color-stops, 2), 1));
+        background-image: -moz-linear-gradient($direction, $color-stops);
+        background-image: -o-linear-gradient($direction, $color-stops);
+        background-image: -webkit-linear-gradient($direction, $color-stops);
+        background-image: linear-gradient($direction, $color-stops);
+    }
+
+@mixin border-radius($radius...) {
+    -moz-border-radius: $radius;
+    -webkit-border-radius: $radius;
+    border-radius: $radius;
+}
+
+@mixin box-shadow($arguments...) {
+    -moz-box-shadow: $arguments;
+    -webkit-box-shadow: $arguments;
+    box-shadow: $arguments;
+}
+
+@mixin transform($arguments...) {
+    -ms-transform: #{$arguments};
+    -moz-transform: #{$arguments};
+    -o-transform: #{$arguments};
+    -webkit-transform: #{$arguments};
+    transform: #{$arguments};
+}
+
+
+/* ====== ANIMATIONS ====== */
+@mixin animation($animate...) {
+    $max: length($animate);
+    $animations: '';
+
+    @for $i from 1 through $max {
+        $animations: #{$animations + nth($animate, $i)};
+
+        @if $i < $max {
+            $animations: #{$animations + ", "};
+        }
+    }
+    -webkit-animation: $animations;
+    -moz-animation:    $animations;
+    -o-animation:      $animations;
+    animation:         $animations;
+}
+
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+
+@mixin transition($arguments...) {
+    -moz-transition: #{$arguments};
+    -o-transition: #{$arguments};
+    -webkit-transition: #{$arguments};
+    transition: #{$arguments};
+}
+
+/* ====== MODULES ====== */
+@mixin btn-color ($background-color, $color) {
+    background-color: $background-color;
+    color: reverse-color($background-color, $color);
+    
+    &:hover {
+        background-color: darken($background-color, 10%);
+        color: reverse-color(darken($background-color, 10%), $color);
+    }
+    
+    &.btn__gradient {
+        @include linear-gradient($background-color, darken($background-color, 8%));
+            color: reverse-color(darken($background-color, 4%), $color);
+        &:hover {
+            @include linear-gradient(darken($background-color, 8%), $background-color);
+            color: reverse-color(darken($background-color, 4%), $color);
+        }
+    }
+}
+
+@mixin link-color($color) {
+    color: $color;
+    
+    &:hover {
+        color: darken($color, 10%);
+    }
+}
