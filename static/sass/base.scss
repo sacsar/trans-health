@@ -43,17 +43,23 @@ $secondary-color: #f5a9b8;
 }
 
 
-
+.btn {
+    &__primary {
+        background-color: $primary-color;
+    }
+    
+    &__secondary {
+        background-color: $secondary-color;
+    }
+    
+}
 .search {
     background-color: lighten($secondary-color, 15%);
     padding: 1em;
     overflow: hidden;
     margin-top: 1em;
     
-    &--bar {
-        margin-bottom: 1em;
-    }
-    &--check {
+    /*&--check {
         display: none;
         
         & + label {
@@ -63,6 +69,7 @@ $secondary-color: #f5a9b8;
             background-color: $secondary-color;
             opacity: .5;
             margin-bottom: .2em;
+            @include border-radius(.3em);
             
             &::before {
                 content: '';
@@ -82,5 +89,25 @@ $secondary-color: #f5a9b8;
             }
             
         }
+    }*/
+    
+    &--button{
+        margin-top: 1.7em;
+    }
+}
+
+.results{
+    &--item {
+        background-color: #FFF;
+        @include box-shadow (0 0 .2em lighten($primary-color, 20%));
+        margin-bottom: 1em;
+        padding: 2em;
+    }
+    
+    &--tag {
+        padding: .2em;
+        @include border-radius(.4em);
+        background-color: lighten($primary-color, 20%);
+        margin-left: .3em;
     }
 }
