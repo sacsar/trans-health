@@ -30,7 +30,8 @@ class Plan (Base):
     company_id = Column(Integer, ForeignKey('company.id'), nullable=False)
     name = Column(String(250), nullable=False)
     state = Column(String(20), nullable=False)
-    color_code = Column(String(30), nullable=True)
+    color_code = Column(Enum('bronze', 'silver', 'gold', 'platinum', 'catastrophic', 'not-present'),
+                        nullable=True)
     medicaid = Column(Boolean, nullable=False)
 
 
