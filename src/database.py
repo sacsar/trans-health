@@ -56,6 +56,7 @@ class Incident (Base):
     __tablename__ = 'incident'
     id = Column(Integer, primary_key=True)
     date = Column(Date, nullable=False)
+    age = Column(Integer, nullable=True)
 
     plan_id = Column(Integer, ForeignKey('plan.id'), nullable=False)
     plan = relationship(Plan, backref=backref('incidents', uselist=True))

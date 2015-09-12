@@ -1,6 +1,7 @@
-from flask import Flask, jsonify, g, request
+from flask import Flask, jsonify, g, request, make_response
 import urllib.parse
 import json
+import datetime
 
 import src.database as database
 
@@ -33,13 +34,18 @@ def post_experience():
     # there may be multiple procedures in one request
     incidents = []
     for procedure in data['procedures']:
-        incidents.append(database.Incident(date=data['date'],
+        incident = database.Incident(date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
                                            plan_id=plan.id,
-                                           gender=data['gender'],
+                                           stated_gender=data['gender'],
                                            procedure=procedure['name'],
                                            success=procedure['success'],
-                                           age=data['age']))
+                                           age=data['age'])
+        incidents.append(incident)
     g.db.add_all(incidents)
+    g.db.commit()
+    r = make_response()
+    r.status_code = 200
+    return r
 
 @app.route('/api/v1/plan', methods=['POST'])
 def post_plan():
@@ -58,6 +64,9 @@ def post_plan():
                                  company=company)
             g.db.add(plan)
             g.db.commit()
+    r = make_response()
+    r.status_code = 200
+    return r
 
 @app.route('/api/v1/search/<search_string>')
 def search_plan(search_string):
@@ -96,7 +105,7 @@ def company_list():
     return jsonify({'companies': [c.name for c in companies]})
 
 def company_by_name(session, name):
-    company = session.query(database.Company).filter(Company.name == name)
+    company = session.query(database.Company).filter(database.Company.name == name).all()
     return company[0] if len(company) > 0 else None
 
 def plan_by_company_name(session, company, plan_name, state):

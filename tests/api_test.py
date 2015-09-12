@@ -39,7 +39,8 @@ class BasicCheck (spec.Spec, unittest.TestCase):
                    'age': 36,
                    'plan': 'blue Advantage Bronze HMO',
                    'company': 'Humana',
-                   'procedure': [
+                   'state': 'TX',
+                   'procedures': [
                         {'name': 'estradiol',
                          'success': True
                         },
@@ -49,5 +50,5 @@ class BasicCheck (spec.Spec, unittest.TestCase):
                   }
         r = requests.post('%s/api/v1/experience' % (server_uri,),
                           headers={'Content-Type': 'application/json'},
-                          data=payload)
+                          data=json.dumps(payload))
         self.assertEqual(r.status_code, requests.codes.ok)
