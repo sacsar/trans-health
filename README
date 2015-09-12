@@ -124,3 +124,39 @@ Plan JSON:
       formulary: file/link
     }
 
+Reports and Views
+=================
+Reporting Plan Information
+--------------------------
+*   Date
+*   Plan
+*   Procedure { name, included/excluded }
+
+Reporting an Experience
+-----------------------
+*   Date
+*   Plan
+*   Gender on Insurance
+*   Age
+*   Procedure { name, covered/not covered }
+
+View for a specific plan
+------------------------
+*   Company
+*   Plan name
+*   List of procedures
+    *   stated info
+    *   experiential info
+    *   info: covered, not/covered
+
+        The information would be a tally of reports, potentially broken down by time period so that if a plan changes what they cover, that can be made visible
+
+Searches
+--------
+*   Plans by company
+*   Plans by state
+*   Plans by procedure
+*   Plans on the exchange
+*   Medicaid plans
+
+I do not know what the search should make easily visible.
