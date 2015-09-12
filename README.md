@@ -106,7 +106,7 @@ Report JSON:
       age:
       plan:
       company:
-      procedure: [ { name:
+      procedures: [ { name:
                      success:
                     }
                  ]
