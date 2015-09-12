@@ -93,9 +93,12 @@ Flask API
 
 Endpoints
 ---------
-*   POST /api/v1/incident
+*   POST /api/v1/experience
 *   POST /api/v1/plan
-*   GET /api/v1/search/<search_string> (search string is URL encoded JSON)
+*   GET /api/v1/search
+    *   state (required)
+    *   dimension: one-of "company", "procedure", "exchange", "plan" (optional)
+    *   values (required if dimension is provided)
 
 API Data Structures
 -------------------
@@ -125,7 +128,7 @@ Plan JSON (for POST):
     }
 
 Plan Reponse:
-    
+
     { state:
       company:
       plan-name:
@@ -134,11 +137,6 @@ Plan Reponse:
       coverage-criteria-availabe:
       formulary-available:
     }
-
-Search format:
-    { state:
-      dimension:
-      values: [ ]}
 
 Reports and Views
 =================
