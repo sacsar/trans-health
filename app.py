@@ -59,12 +59,11 @@ def post_plan():
             g.db.add(plan)
             g.db.commit()
 
-@app.route('/api/v1/search/<search_string>')
-def search_plan(search_string):
-    params = json.loads(urllib.parse.unquote_plus(search_string))
-    state = params['state']
-    dimension = params.get('dimension')
-    values = params.get('values')
+@app.route('/api/v1/search')
+def search_plan():
+    state = request.args.get('state')
+    dimension = request.args.get('dimension', None)
+    values = request.args.get('values', None)
     results = []
     query = g.db.query(database.Plan).filter(database.Plan.state == state)
     if dimension == 'company':

@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 # pylint: disable=C0111
 
-import database
+import src.database as database
 
 def build ():
     s = database.connect('trans-health.db')
@@ -28,7 +28,7 @@ def build ():
                         color_code='catastrophic',
                         medicaid=False))
     s.add(database.Plan(company=humana,
-                        name='blue Advantage Bronze',
+                        name='blue Advantage Bronze HMO',
                         state='TX',
                         color_code='bronze',
                         medicaid=False))
