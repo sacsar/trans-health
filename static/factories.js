@@ -1,7 +1,7 @@
 angular
 	.module('app')
-	.factory('apiFactory', apiFactory);
+	.factory('apiFactory', [$http, apiFactory]);
 
-function apiFactory(){
-	
+function apiFactory($http){
+
 }
