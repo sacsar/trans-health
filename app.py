@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.before_request
 def before_request():
-    g.db = database.connect('trans-health.db'))
+    g.db = database.connect('trans-health.db')
 
 @app.teardown_request
     db = getattr(g, 'db', None)
