@@ -93,9 +93,10 @@ Flask API
 
 Endpoints
 ---------
-*   PUT /incident
-*   PUT /
-*   ????
+*   POST /api/v1/incident
+*   POST /api/v1/plan
+*   GET /api/v1/search/\<state\>/\<dimension\>/\<value\>, where dimension = [company, procedure, exchange (t/f), medicaid(t/f)]
+*   GET /api/v1/search/\<state\> all plans in a state
 
 API Data Structures
 -------------------
@@ -112,16 +113,25 @@ Report JSON:
                  ]
       }
 
-Plan JSON:
+Plan JSON (for POST):
 
     { state:
       company:
       plan-name:
       type: (medicaid, private, bronze, silver, gold, platinum, catastrophic)
-      exclusion: yes/no
+      exclusions: (all transition-related care, surgery, hormones)
       plan-document: file/link
       coverage-criteria: file/link
       formulary: file/link
+    }
+
+Plan Reponse:
+    
+    { state:
+      company:
+      plan-name:
+      type:
+
     }
 
 Reports and Views
