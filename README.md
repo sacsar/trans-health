@@ -99,6 +99,9 @@ Endpoints
     *   state (required)
     *   dimension: one-of "company", "procedure", "exchange", "plan" (optional)
     *   values (required if dimension is provided)
+    *   { 'plans': [plan response] }
+*   GET /api/v1/companies
+    *   { 'companies': [ list of companies ] }
 
 API Data Structures
 -------------------
