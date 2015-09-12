@@ -24,7 +24,7 @@ def teardown_request(exception):
 
 @app.route('/api/v1/experience', methods=['POST'])
 def post_experience():
-    data = resquest.get_json()
+    data = request.get_json()
     # need to look up plan and company
     plan = plan_by_company_name(g.db,
                                 data['company'],
