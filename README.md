@@ -187,3 +187,7 @@ Database Access
     ... )
     >>> s.query(database.Plan).all()
     [<database.Plan object at 0x7f29e4a885c0>]
+
+To-Do
+=====
+*   Need to allow for people submitting/updating plans that already exist
