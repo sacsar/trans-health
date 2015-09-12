@@ -160,3 +160,20 @@ Searches
 *   Medicaid plans
 
 I do not know what the search should make easily visible.
+
+
+Database Access
+===============
+
+    (env)savanni@conway:~/src/trans-health$ PYTHONPATH=src python
+    Python 3.4.3 (default, Mar 26 2015, 22:03:40)
+    [GCC 4.9.2] on linux
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> import database
+    >>> s = database.connect('trans-health.db')
+    >>> s.query(database.Company).all()
+    [<database.Company object at 0x7f29e4a5dd30>]
+    >>> s.add(database.Plan(company_id=1, name='Super Plan!', state='TX', color_code='None', medicaid=True)
+    ... )
+    >>> s.query(database.Plan).all()
+    [<database.Plan object at 0x7f29e4a885c0>]
