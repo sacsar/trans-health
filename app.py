@@ -11,6 +11,7 @@ def before_request():
     g.db = database.connect('trans-health.db')
 
 @app.teardown_request
+def teardown_request():
     db = getattr(g, 'db', None)
     if db is not None:
         db.commit()
@@ -58,7 +59,7 @@ def post_plan():
 @app.route('/api/v1/search/<state>')
 @app.route('/api/v1/search/<state>/<dimension>/<value>')
 def search_plan(state, dimension=None, value=None):
-    query = g.db.query(database.Plan).filter(database.Plan.state = state)
+    query = g.db.query(database.Plan).filter(database.Plan.state == state)
     if dimension == 'company':
         company = company_by_name(g.db, value)
         if company is None:
