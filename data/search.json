@@ -1,23 +1,33 @@
 [
     {
-        "plan": "Bronze Plan",
-        "company": "Insurance A",
         "state": "TX",
-        "excluded": ["surgery 1", "hormone 1"],
-        "tags": ["medicaid"]
-    },
-    {
-        "plan": "Catastrophic Plan",
         "company": "Insurance A",
-        "state": "TX",
-        "excluded": ["surgery 2", "hormone 2"],
-        "tags": ["exchange", "medicaid"]
-    },
-    {
         "plan": "Bronze Plan",
-        "company": "Insurance B",
-        "state": "IL",
-        "excluded": ["surgery 1", "hormone 2"],
-        "tags": ["exchange"]
+        "exchange": null,
+        "medicaid": true,
+        "coverage": {
+            "hormones": {
+                "yes": 3,
+                "no": 2,
+                "unknown": 50
+            },
+            "surgery": {
+                "yes": 3,
+                "no": 2,
+                "unknown": 50
+            }
+        },
+        "claims": {
+            "hormones": [{
+                "name": "hormone 1",
+                "yes": 5,
+                "no": 10
+            }],
+            "surgery": [{
+                "name": "surgery 1",
+                "yes": 5,
+                "no": 10
+            }]
+        }
     }
 ]
