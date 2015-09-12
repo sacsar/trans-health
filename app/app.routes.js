@@ -4,8 +4,13 @@ transHealthApp.config(function($routeProvider) {
         templateUrl: 'app/components/search/search.html',
         controller: 'searchController'
     })
-    .when('/report/plan', {
-        templateUrl: 'app/components/report-plan/report-plan.html',
+    .when ('/results/:state/:query?', {
+        templateUrl: 'app/components/results/results.html',
+        controller: 'resultsController',
+        reloadOnSearch: false
+    })
+    .when('/share/plan', {
+        templateUrl: 'app/components/share-plan/share-plan.html',
     })
     .otherwise({
             redirectTo: '/'
