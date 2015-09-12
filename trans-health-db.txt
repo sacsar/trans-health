@@ -1,0 +1,12 @@
+% Transition Related Health Care Database
+
+*   By company/plan(?)
+    *   What procedures are covered
+    *   What hormones are covered
+    *   What do they claim is covered
+    *   What experience have people actually had with the coverage
+
+*   Instructions for gathering information about your plan
+    *   Exclusions
+    *   Formulary
+    *   Coverage limits (when they only pay $5 for surgery)
