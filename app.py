@@ -1,4 +1,7 @@
 from flask import Flask, jsonify, g, request
+import urllib.parse
+import json
+
 import src.database as database
 
 
@@ -56,25 +59,35 @@ def post_plan():
             g.db.add(plan)
             g.db.commit()
 
-@app.route('/api/v1/search/<state>')
-@app.route('/api/v1/search/<state>/<dimension>/<value>')
-def search_plan(state, dimension=None, value=None):
+@app.route('/api/v1/search/<search_string>')
+def search_plan(search_string):
+    params = json.loads(urllib.parse.unquote_plus(search_string))
+    state = params['state']
+    dimension = params.get('dimension')
+    values = params.get('values')
     results = []
     query = g.db.query(database.Plan).filter(database.Plan.state == state)
     if dimension == 'company':
-        company = company_by_name(g.db, value)
+        company = company_by_name(g.db, values[0])
         if company is None:
             results = []
         else:
-            results = company.plans
+            results = [p.to_dict() for p in company.plans]
     elif dimension == 'procedure':
         # looking for plans where someone has reported coverage
         results = []
     elif dimension == 'exchange':
-        query = query.filter(database.Plan.color_code != 'not-present')
-        results = query.all()
+        if values[0] == 'true':
+            query = query.filter(database.Plan.color_code != 'not-present')
+            results = [p.to_dict() for p in query.all()]
+        elif values[0] == 'false':
+            query = query.filter(database.Plan.color_code == 'not-present')
+            results = [p.to_dict() for p in query.all()]
+    elif dimension == 'plan':
+        plan = plan_by_company_name(g.db, values[0], values[1], state)
+        results = [plan.to_dict()]
     elif dimension is None:
-        results = query.all()
+        results = [p.to_dict() for p in query.all()]
     return jsonify({'plans': results})
 
 @app.route('/api/v1/companies')

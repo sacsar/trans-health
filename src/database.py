@@ -37,6 +37,20 @@ class Plan (Base):
                         nullable=True)
     medicaid = Column(Boolean, nullable=False)
 
+    def to_dict(self):
+        if self.color_code != 'not-present':
+            plan_type = self.color_code
+        elif self.medicaid:
+            plan_type = 'medicaid'
+        else:
+            plan_type = 'private'
+
+        return {'state': self.state,
+                'company': self.company.name,
+                'plan-name': self.name,
+                'type': plan_type
+                }
+
 
 class Incident (Base):
     __tablename__ = 'incident'
