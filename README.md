@@ -93,8 +93,8 @@ Flask API
 
 Endpoints
 ---------
-*   PUT /incident
-*   PUT /
+*   POST /api/v1/incident
+*   POST /api/v1/plan
 *   ????
 
 API Data Structures
