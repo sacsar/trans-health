@@ -113,16 +113,25 @@ Report JSON:
                  ]
       }
 
-Plan JSON:
+Plan JSON (for POST):
 
     { state:
       company:
       plan-name:
       type: (medicaid, private, bronze, silver, gold, platinum, catastrophic)
-      exclusion: yes/no
+      exclusions: (all transition-related care, surgery, hormones)
       plan-document: file/link
       coverage-criteria: file/link
       formulary: file/link
+    }
+
+Plan Reponse:
+    
+    { state:
+      company:
+      plan-name:
+      type:
+
     }
 
 Reports and Views
