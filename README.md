@@ -95,7 +95,8 @@ Endpoints
 ---------
 *   POST /api/v1/incident
 *   POST /api/v1/plan
-*   ????
+*   GET /api/v1/search/<state>/<dimension>/<value>, where dimension = [company, procedure, exchange (t/f), medicaid(t/f)]
+*   GET /api/v1/search/<state> all plans in a state
 
 API Data Structures
 -------------------
