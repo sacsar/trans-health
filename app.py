@@ -63,8 +63,8 @@ def post_plan():
 def search_plan(search_string):
     params = json.loads(urllib.parse.unquote_plus(search_string))
     state = params['state']
-    dimension = params['dimension']
-    values = params['values']
+    dimension = params.get('dimension')
+    values = params.get('values')
     results = []
     query = g.db.query(database.Plan).filter(database.Plan.state == state)
     if dimension == 'company':
