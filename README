@@ -14,8 +14,11 @@
 
 ----
 
+Procedures
+==========
+
 Medications
-===========
+-----------
 *   cyproterone
 *   spironolactone
 *   finasteride
@@ -25,7 +28,7 @@ Medications
 *   GnRH analogue
 
 Delivery Methods for Medications
-================================
+--------------------------------
 *   pill
 *   transdermal
 *   injectable
@@ -33,7 +36,7 @@ Delivery Methods for Medications
 *   long-lasting injection
 
 Surgeries
-=========
+---------
 *   Facial Feminization
 *   Mastectomy
 *   Phalloplasty
@@ -46,6 +49,78 @@ Surgeries
 *   Metoidioplasty
 
 Others
-======
+------
 *   Therapy/Counselling
 *   Voice Retraining
+
+Database Structure
+==================
+
+Procedure Incident
+------------------
+*   Date
+*   Plan ID
+*   Procedure
+*   Stated Gender (M/F/??? because it is possible to not know what gender your provider put on the application)
+*   Success
+
+Coverage Statement
+------------------
+*   Date
+*   Plan ID
+*   Procedure
+*   Claims to be covered (Yes / No / Unknown)
+
+Documents
+---------
+*   Plan ID
+*   Coverage Statement ID
+*   Date
+*   MD5
+*   Path on disk
+
+Plan
+----
+*   Plan ID
+*   Company ID
+*   Name
+*   State
+*   Exchange color code (bronze, silver, gold, platinum, catastrophic, not-present, NULL)
+*   Medicaid (yes/no)
+
+Flask API
+=========
+
+Endpoints
+---------
+*   PUT /incident
+*   PUT /
+*   ????
+
+API Data Structures
+-------------------
+Report JSON:
+
+    { date:
+      gender:
+      age:
+      plan:
+      company:
+      procedure: [ { name:
+                     success:
+                    }
+                 ]
+      }
+
+Plan JSON:
+
+    { state:
+      company:
+      plan-name:
+      type: (medicaid, private, bronze, silver, gold, platinum, catastrophic)
+      exclusion: yes/no
+      plan-document: file/link
+      coverage-criteria: file/link
+      formulary: file/link
+    }
+
