@@ -15,7 +15,7 @@ coverage_report = {'date': '2015-08-22',
                         {'name': 'surgery', 'covered': 'yes' }
                         ]
                   }
-r = requests.post('%s/api/v1/reportcoverage' % (server_uri,),
+r = requests.post('%s/api/v1/coverage' % (server_uri,),
                   headers={'Content-Type': 'application/json'},
                   data=json.dumps(coverage_report))
 print(r.status_code)

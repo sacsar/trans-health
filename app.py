@@ -48,8 +48,8 @@ def post_experience():
     r.status_code = 200
     return r
 
-@app.route('/api/v1/reportcoverage', methods=['POST'])
-def report_coverage():
+@app.route('/api/v1/coverage', methods=['POST'])
+def post_coverage():
     data = request.get_json()
     # look up by plan and company
     plan = plan_by_company_name(g.db,
