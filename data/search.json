@@ -7,7 +7,7 @@
         "medicaid": true,
         "coverage": {
             "count": 173,
-            "hormones": {,
+            "hormones": {
                 "yes": 11,
                 "no": 12,
                 "unknown": 150
