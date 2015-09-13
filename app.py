@@ -59,12 +59,12 @@ def report_coverage():
     # there may be multiple service_types in one request
     coverage_reports = []
     for service_type in data['service_types']:
-         coverage =  database.CoverageStatement(date = datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
-                                                plan = plan.id,
-                                                service_type = service_type['name'],
-                                                covered = data['covered'])
-         coverage_reports.apend(coverage)
-    g.db.add_all(incidents)
+        coverage =  database.CoverageStatement(date = datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
+                                               plan = plan,
+                                               service_type = service_type['name'],
+                                               covered = service_type['covered'])
+        coverage_reports.append(coverage)
+    g.db.add_all(coverage_reports)
     g.db.commit()
     r = make_response()
     r.status_code = 200
