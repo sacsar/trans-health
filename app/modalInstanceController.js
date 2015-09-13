@@ -1,10 +1,7 @@
-transHealthApp.controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+transHealthApp.controller('ModalInstanceCtrl', function ($scope, $modalInstance, success) {
 
-  $scope.items = items;
-  $scope.selected = {
-    item: 'foo'
-  };
 
+  $scope.success = success;
   $scope.ok = function () {
     $modalInstance.close();
   };

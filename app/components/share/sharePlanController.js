@@ -52,11 +52,8 @@ transHealthApp.controller('sharePlanController', function($scope, $location, $ht
 		}
 
 		postCoverage(coverage_report)
-			.success(function(resp){console.log("Success!")})
-			.error(function(resp, err, data){
-				$scope.open()
-			})
-
+  			.success(function(resp){$scope.open(true)})
+  			.error(function(){$scope.open(false)})
 	}
 
 	// this should be a service
@@ -68,23 +65,22 @@ transHealthApp.controller('sharePlanController', function($scope, $location, $ht
 	// modal stuff, should be a directive
 
 	  $scope.animationsEnabled = true;
+  
+  $scope.open = function (outcome) {
 
-  $scope.open = function (size) {
+  	console.log("Open" + outcome)
 
     var modalInstance = $modal.open({
       animation: $scope.animationsEnabled,
       templateUrl: 'myModalContent.html',
       controller: 'ModalInstanceCtrl',
-      size: size,
       resolve: {
-        items: function () {
-          return $scope.items;
+        success: function() {return outcome }
         }
-      }
     });
 
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
+    modalInstance.result.then(function (success) {
+    	$scope.success = success
     }, function () {
     });
   };

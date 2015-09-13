@@ -159,12 +159,15 @@
             <button class="btn btn-default" data-ng-click="submitplan()">Submit</button>
         </div>
 
-        <script type="text/ng-template" id="myModalContent.html">
+    <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
-            <h3 class="modal-title">Error!</h3>
+
+            <h3 class="modal-title" ng-if="success">Success!</h3>
+            <h3 class="modal-title" ng-if="!success">Error!</h3>
         </div>
         <div class="modal-body">
-            Unfortunately, an error has occurred.            
+            <p ng-if="!success">Unfortunately, an error has occurred.</p>
+            <p ng-if="success">Thank you for your submission.</p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
