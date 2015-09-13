@@ -22,6 +22,43 @@ def connect (db_path):
     return DBSession()
 
 
+# TODO: refactor significantly
+# company_by_name, plan_by_company_name, and create_plan have a very poor logic flow. But we
+# are out of time and trying to make sure that this feature exists.
+def company_by_name(session, name):
+    company = session.query(Company).filter(Company.name == name).all()
+    return company[0] if len(company) > 0 else None
+
+
+def plan_by_company_name(session, company_name, plan_name, state):
+    company = company_by_name(session, company_name)
+    if company is None:
+        return None
+
+    plans = [p for p in company.plans
+             if p.state == state and p.name == plan_name]
+    return plans[0] if plans else None
+
+
+def create_plan(session, company_name, plan_name, state):
+    company = company_by_name(session, company_name)
+    if company is None:
+        c = Company(name=company_name)
+        session.add(c)
+        session.commit()
+    company = company_by_name(session, company_name)
+    assert company is not None
+
+    plan = Plan(company=company,
+                name=plan_name,
+                state=state,
+                color_code=None,
+                medicaid=False)
+    session.add(plan)
+    session.commit()
+    return plan_by_company_name(session, company_name, plan_name, state)
+
+
 class Company (Base):
     __tablename__ = 'company'
     id = Column(Integer, primary_key=True)
