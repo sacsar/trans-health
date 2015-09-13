@@ -44,7 +44,6 @@ transHealthApp.controller('shareExperienceController', function ($scope, $locati
   				  outcome: $scope.outcome,
   				  age: $scope.age
   				}
-  		console.log("submit experience")
   		postExperience(params)
   	}
 
