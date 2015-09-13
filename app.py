@@ -48,50 +48,48 @@ def post_experience():
     r.status_code = 200
     return r
 
-@app.route('api/v1/reportcoverage', methods=['POST'])
+@app.route('/api/v1/reportcoverage', methods=['POST'])
 def report_coverage():
     data = request.get_json()
     # look up by plan and company
-    plan = plan_by_company_name(g.db, 
+    plan = plan_by_company_name(g.db,
                                 data['company'],
                                 data['plan'],
                                 data['state'])
-    # there may be multiple procedures in one request
+    # there may be multiple service_types in one request
     coverage_reports = []
-    for procedure in data['procedures']:
-         coverage =  database.Coverage_Statement(date = datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
-                                                 plan = plan.id,
-                                                 procedure = procedure['name'],
-                                                 covered = data['covered'])
+    for service_type in data['service_types']:
+         coverage =  database.CoverageStatement(date = datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
+                                                plan = plan.id,
+                                                service_type = service_type['name'],
+                                                covered = data['covered'])
          coverage_reports.apend(coverage)
     g.db.add_all(incidents)
     g.db.commit()
     r = make_response()
     r.status_code = 200
-    return r 
- 
-/*
-@app.route('/api/v1/plan', methods=['POST'])
-def post_plan():
-    data = request.get_json()
-    # check if the plan exists
-    add = True
-    if add:
-        # lookup company
-        company = company_by_name(data['company'])
-        if company is None:
-            # add the company
-            g.db.add(database.Company(name=name))
-            plan = database.Plan(state=data['state'],
-                                 type=data['type'],
-                                 exclusions=data['exclusions'],
-                                 company=company)
-            g.db.add(plan)
-            g.db.commit()
-    r = make_response()
-    r.status_code = 200
     return r
-*/
+
+# @app.route('/api/v1/plan', methods=['POST'])
+# def post_plan():
+#     data = request.get_json()
+#     # check if the plan exists
+#     add = True
+#     if add:
+#         # lookup company
+#         company = company_by_name(data['company'])
+#         if company is None:
+#             # add the company
+#             g.db.add(database.Company(name=name))
+#             plan = database.Plan(state=data['state'],
+#                                  type=data['type'],
+#                                  exclusions=data['exclusions'],
+#                                  company=company)
+#             g.db.add(plan)
+#             g.db.commit()
+#     r = make_response()
+#     r.status_code = 200
+#     return r
 
 @app.route('/api/v1/search')
 def search_plan():
