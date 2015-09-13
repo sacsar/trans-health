@@ -32,17 +32,17 @@ def post_experience():
                                 data['company'],
                                 data['plan'],
                                 data['state'])
-    # there may be multiple procedures in one request
-    incidents = []
-    for procedure in data['procedures']:
-        incident = database.Incident(date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
-                                           plan_id=plan.id,
-                                           stated_gender=data['gender'],
-                                           procedure=procedure['name'],
-                                           success=procedure['success'],
-                                           age=data['age'])
-        incidents.append(incident)
-    g.db.add_all(incidents)
+    # there may be multiple services in one request
+    experiences = []
+    for service in data['services']:
+        experience = database.Experience(date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
+                                         plan=plan,
+                                         documented_gender=data['gender'],
+                                         service=service['name'],
+                                         success=service['success'],
+                                         age=data['age'])
+        experiences.append(experience)
+    g.db.add_all(experiences)
     g.db.commit()
     r = make_response()
     r.status_code = 200
