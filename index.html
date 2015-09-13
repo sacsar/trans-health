@@ -7,15 +7,23 @@
     <body>
         <header class="header">
             <div class="container">
-                <h1 class="header--title col-xs-6 col-sm-6">Trans-Health</h1>
-                <a class="btn btn__secondary col-xs-3 col-sm-3" href="#/share/plan">Share your plan</a>
-                <a class="btn btn__secondary col-xs-3 col-sm-3" href="#/share/experience">Share your experience</a>
+                <div class="row">
+                    <a href="#/"><h1 class="header--title col-xs-12 col-sm-6">Trans-Health</h1></a>
+                    <div class="col-xs-12 col-sm-6 header--buttons">
+                        <a class="btn btn__secondary" href="#/share/plan">Share your plan</a>
+                        <a class="btn btn__secondary" href="#/share/experience">Share your experience</a>
+                    </div>
                 </div>
+            </div>
         </header>
         
         <main class="container" data-ng-view></main>
         
-        
+        <footer class="footer">
+            <div class="container">
+                <p class="text-right">Frequently asked question</p>
+            </div>
+        </footer>
         <!-- JQUERY -->
         <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
         

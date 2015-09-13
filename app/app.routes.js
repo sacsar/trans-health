@@ -17,6 +17,9 @@ transHealthApp.config(function($routeProvider) {
         templateUrl: 'app/components/share-experience/share-experience.html',
         controller: 'shareExperienceController'
     })
+    .when('/faq', {
+        templateUrl: 'app/components/faq/faq.html',
+    })
     .otherwise({
             redirectTo: '/'
     });
