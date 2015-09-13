@@ -14,7 +14,7 @@ server_uri = 'http://127.0.0.1:5000'
 class BasicCheck (spec.Spec, unittest.TestCase):
     def test_can_run (self):
         r = requests.get('%s/' % (server_uri,))
-        self.assertEqual(r.status_code, requests.codes.not_found)
+        self.assertEqual(r.status_code, requests.codes.ok)
 
     def test_get_companies (self):
         r = requests.get('%s/api/v1/companies' % (server_uri,))
@@ -83,8 +83,8 @@ cigna_plan = {
         },
         'surgery': {
             'yes': 0,
-            'no': 0,
-            'unknown': 0
+            'no': 1,
+            'unknown': 3
         }
     },
     'claims': {

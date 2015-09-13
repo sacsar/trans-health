@@ -7,9 +7,9 @@ import requests
 server_uri = 'http://127.0.0.1:5000'
 
 coverage_report = {'date': '2015-08-22',
-                   'plan': 'blue Advantage Bronze HMO',
-                   'company': 'Humana',
-                   'state': 'TX',
+                   'plan': 'blue Advantage Bronze HMO for Massachusetts',
+                   'company': 'Interstate',
+                   'state': 'MA',
                    'service_types': [
                         {'name': 'medication', 'covered': 'yes' },
                         {'name': 'surgery', 'covered': 'yes' }

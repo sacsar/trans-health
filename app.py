@@ -54,10 +54,12 @@ def js(path):
 def post_experience():
     data = request.get_json()
     # need to look up plan and company
-    plan = plan_by_company_name(g.db,
-                                data['company'],
-                                data['plan'],
-                                data['state'])
+    plan = database.plan_by_company_name(g.db,
+                                         data['company'],
+                                         data['plan'],
+                                         data['state'])
+    if plan is None:
+        plan = database.create_plan(g.db, data['company'], data['plan'], data['state'])
 
     def make_experience (service_data):
         return database.Experience(
@@ -78,10 +80,12 @@ def post_experience():
 def post_coverage():
     data = request.get_json()
     # look up by plan and company
-    plan = plan_by_company_name(g.db,
-                                data['company'],
-                                data['plan'],
-                                data['state'])
+    plan = database.plan_by_company_name(g.db,
+                                         data['company'],
+                                         data['plan'],
+                                         data['state'])
+    if plan is None:
+        plan = database.create_plan(g.db, data['company'], data['plan'], data['state'])
 
     def make_coverage (service_type_data):
         return database.CoverageStatement(
@@ -153,16 +157,6 @@ def plans_list():
 @app.route('/api/v1/services')
 def service_list():
     return build_response(json_content=reports.service_types)
-
-def company_by_name(session, name):
-    company = session.query(database.Company).filter(database.Company.name == name).all()
-    return company[0] if len(company) > 0 else None
-
-def plan_by_company_name(session, company_name, plan_name, state):
-    company = company_by_name(session, company_name)
-    plan = [p for p in company.plans if p.state == state
-            and p.name == plan_name][0]
-    return plan
 
 if __name__ == '__main__':
     app.run(debug=True)
