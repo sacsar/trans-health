@@ -17,13 +17,13 @@ def plan_summary (plan):
         'medicaid': plan.medicaid,
         'coverage': {
             'medication': {
-                'yes': len(scan_coverage(plan.coverage_statements, 'medication', 'true')),
-                'no': len(scan_coverage(plan.coverage_statements, 'medication', 'false')),
+                'yes': len(scan_coverage(plan.coverage_statements, 'medication', 'yes')),
+                'no': len(scan_coverage(plan.coverage_statements, 'medication', 'no')),
                 'unknown': len(scan_coverage(plan.coverage_statements, 'medication', 'unknown'))
                 },
             'surgery': {
-                'yes': len(scan_coverage(plan.coverage_statements, 'surgery', 'true')),
-                'no': len(scan_coverage(plan.coverage_statements, 'surgery', 'false')),
+                'yes': len(scan_coverage(plan.coverage_statements, 'surgery', 'yes')),
+                'no': len(scan_coverage(plan.coverage_statements, 'surgery', 'no')),
                 'unknown': len(scan_coverage(plan.coverage_statements, 'surgery', 'unknown'))
                 }
             },
