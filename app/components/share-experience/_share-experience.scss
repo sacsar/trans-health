@@ -1,0 +1,23 @@
+.gender {
+    label {
+        background-color: $primary-color;
+        @include border-radius(.3em);
+        display: block;
+        
+        padding: .4em;
+        text-align: center;
+        color: #fff;
+        
+        opacity: .5;
+        
+        input {
+            display: none;
+
+            &:checked {
+                label & {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

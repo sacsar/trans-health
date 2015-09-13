@@ -17,6 +17,7 @@ body {
     }
 }
 .header {
+    margin-bottom: 2em;
     padding: .3em;
     
     background-color: $primary-color;
@@ -48,3 +49,4 @@ body {
 /* COMPONENTS */
 @import '../../app/components/search/search';
 @import '../../app/components/results/results';
+@import '../../app/components/share-experience/share-experience';
