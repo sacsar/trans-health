@@ -63,12 +63,12 @@ def post_experience():
 
     def make_experience (service_data):
         return database.Experience(
-                    date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
+                    date=datetime.datetime.strptime(service_data['date'], '%Y-%m-%d'),
                     plan=plan,
-                    documented_gender='unknown',
+                    documented_gender='U',
                     service=service_data['name'],
                     success=service_data['success'],
-                    age=data['age'])
+                    age=service_data['age'])
 
     # there may be multiple services in one request
     experiences = [make_experience(service_data) for service_data in data['services']]
