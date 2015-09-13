@@ -9,9 +9,6 @@ transHealthApp.config(function($routeProvider) {
         controller: 'resultsController',
         reloadOnSearch: false
     })
-    .when('/share/plan', {
-        templateUrl: 'app/components/share-plan/share-plan.html',
-    })
     .otherwise({
             redirectTo: '/'
     });
