@@ -65,7 +65,7 @@ transHealthApp.controller('sharePlanController', function($scope, $location, $ht
 		return $http.post('/api/v1/coverage', payload)
 	}
 
-	// modal stuff
+	// modal stuff, should be a directive
 
 	  $scope.animationsEnabled = true;
 
@@ -89,20 +89,4 @@ transHealthApp.controller('sharePlanController', function($scope, $location, $ht
     });
   };
 
-});
-
-transHealthApp.controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
-
-  $scope.items = items;
-  $scope.selected = {
-    item: 'foo'
-  };
-
-  $scope.ok = function () {
-    $modalInstance.close();
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
 });
