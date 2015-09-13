@@ -13,10 +13,10 @@ experience_report = {'date': '2015-08-22',
                      'company': 'Humana',
                      'state': 'TX',
                      'services': [
-                          {'name': 'estradiol',
+                          {'name': 'Estradiol',
                            'success': True
                           },
-                          {'name': 'spironolactone',
+                          {'name': 'Spironolactone',
                            'success': True
                           }]
                     }
