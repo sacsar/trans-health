@@ -2,8 +2,8 @@
     <h1 class="text-center col-xs-12">Search for insurance coverage</h1>
     
     <form class="search col-xs-12 col-sm-offset-1 col-sm-10">
-        <div class="form-group col-sx-12 col-sm-3">
-            <label for="state">State <span class="text__primary">*</span></label>
+        <div class="form-group col-sx-12 col-sm-3" data-ng-class="{'has-error': err}">
+            <label for="state" class="control-label">State <span class="text__primary">*</span></label>
             <select id="state" class="form-control" data-ng-model="state">
                 <option selected></option>
                 <option>AL</option>
@@ -60,12 +60,12 @@
         </div>
         
         <div class="form-group col-sx-12 col-sm-6">
-            <label for="query">Company, plan, or procedure name</label>
+            <label for="query" class="control-label">Company, plan, or procedure name</label>
             <input type="search" id="query" class="form-control" data-ng-model="query"/>
         </div>
-        
+        {{ test }}
         <div class="form-group col-sx-12 col-sm-3">
-            <button class="btn btn__primary search--button col-xs-12" data-ng-click="search(state, query)">Search</button>
+            <button class="btn btn__primary search--button col-xs-12" data-ng-click="searchPlan(state, query)">Search</button>
         </div>
 <!--
         <div class="checkbox col-xs-12 col-sm-3">
