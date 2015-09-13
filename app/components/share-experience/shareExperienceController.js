@@ -1,4 +1,4 @@
-transHealthApp.controller('shareExperienceController', function ($scope, $location, $http){
+transHealthApp.controller('shareExperienceController', function ($scope, $location, $http, $modal){
 	//var experienceService = shareExperienceService;
 
 	$scope.err = false;
@@ -36,6 +36,7 @@ transHealthApp.controller('shareExperienceController', function ($scope, $locati
   	};
 
   	$scope.submitexperience = function(){
+  		console.log("submit experience")
   		params = {date: $scope.date,
   				  plan: $scope.plan,
   				  company: $scope.company,
@@ -45,6 +46,8 @@ transHealthApp.controller('shareExperienceController', function ($scope, $locati
   				  age: $scope.age
   				}
   		postExperience(params)
+  			.success(function(resp){console.log("Success")})
+  			.error(function(){$scope.open()})
   	}
 
   	// this should be factored out as a service, but right now it's busted
@@ -61,6 +64,29 @@ transHealthApp.controller('shareExperienceController', function ($scope, $locati
   				   			  }]
   				}
 
-  		$http.post('/api/v1/experience', payload)
+  		return $http.post('/api/v1/experience', payload)
   	};
+
+  	//model stuff, should be a directive 
+	  $scope.animationsEnabled = true;
+
+  $scope.open = function (size) {
+
+    var modalInstance = $modal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+    });
+  };
 });
