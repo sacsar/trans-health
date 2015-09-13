@@ -2,6 +2,7 @@ from flask import Flask, jsonify, g, request, make_response
 import urllib.parse
 import json
 import datetime
+import requests
 
 import src.database as database
 import src.reports as reports
@@ -10,6 +11,23 @@ import src.reports as reports
 app = Flask(__name__)
 
 # DB connection, stuff
+
+def build_response (json_content=None):
+    response = make_response()
+    # copied this from http://stackoverflow.com/questions/49547/making-sure-a-web-page-is-not-cached-across-all-browsers
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate" # HTTP 1.1.
+    response.headers["Pragma"] = "no-cache" # HTTP 1.0.
+    response.headers["Expires"] = "0" # Proxies.   r.status_code = 200
+
+    if json_content:
+        response.status_code = requests.codes.ok
+        response.headers['Content-type'] = 'application/json'
+        response.data = json.dumps(json_content)
+    else:
+        response.status_code = requests.codes.no_content
+
+    return response
+
 
 @app.before_request
 def before_request():
@@ -46,9 +64,7 @@ def post_experience():
     experiences = [make_experience(service_data) for service_data in data['services']]
     g.db.add_all(experiences)
     g.db.commit()
-    r = make_response()
-    r.status_code = 200
-    return r
+    return build_response()
 
 @app.route('/api/v1/coverage', methods=['POST'])
 def post_coverage():
@@ -71,9 +87,7 @@ def post_coverage():
                         for service_type_data in data['service_types']]
     g.db.add_all(coverage_reports)
     g.db.commit()
-    r = make_response()
-    r.status_code = 200
-    return r
+    return build_response()
 
 # @app.route('/api/v1/plan', methods=['POST'])
 # def post_plan():
@@ -113,36 +127,24 @@ def search_plan():
     plans = g.db.query(database.Plan).filter(database.Plan.state == state).all()
     matching_plans = filter(plan_filter, plans)
 
-    r = make_response()
-    r.status_code = 200
-    r.headers['Content-type'] = 'application/json'
-    r.data = json.dumps([reports.plan_summary(p) for p in matching_plans])
-    return r
+    return build_response(json_content=[reports.plan_summary(p) for p in matching_plans])
 
 @app.route('/api/v1/companies')
 def company_list():
     companies = g.db.query(database.Company).all()
-    return jsonify({'companies': [c.name for c in companies]})
+    return build_response(json_content={'companies': [c.name for c in companies]})
 
 @app.route('/api/v1/plans')
 def plans_list():
    the_plans = g.db.query(database.Plan).all()
-   r = make_response()
-   r.status_code = 200
-   r.headers['Content-type'] = 'application/json'
-   r.data = json.dumps([{'state': p.state,
-                    'company': p.company.name,
-                    'plan': p.name}
-                     for p in the_plans])
-   return r
+   return build_response(json_content=[{'state': p.state,
+                                'company': p.company.name,
+                                'plan': p.name}
+                                 for p in the_plans])
 
 @app.route('/api/v1/services')
 def service_list():
-    r = make_response()
-    r.status_code = 200
-    r.headers['Content-type'] = 'application/json'
-    r.data = json.dumps(reports.service_types)
-    return r
+    return build_response(json_content=reports.service_types)
 
 def company_by_name(session, name):
     company = session.query(database.Company).filter(database.Company.name == name).all()
