@@ -71,40 +71,25 @@ def post_plan():
 
 @app.route('/api/v1/search')
 def search_plan():
-    state = request.args.get('state')
-    results = g.db.query(database.Plan).filter(database.Plan.state == state).all()
+    state           = request.args.get('state')
+    exchange_code   = request.args.get('exchange_code')
+    plan_name       = request.args.get('plan_name')
 
-    # dimension = request.args.get('dimension', None)
-    # values = request.args.get('values', None)
-    # results = []
-    # query = g.db.query(database.Plan).filter(database.Plan.state == state)
-    # if dimension == 'company':
-    #     company = company_by_name(g.db, values[0])
-    #     if company is None:
-    #         results = []
-    #     else:
-    #         results = [p.to_dict() for p in company.plans]
-    # elif dimension == 'procedure':
-    #     # looking for plans where someone has reported coverage
-    #     results = []
-    # elif dimension == 'exchange':
-    #     if values[0] == 'true':
-    #         query = query.filter(database.Plan.color_code != 'not-present')
-    #         results = [p.to_dict() for p in query.all()]
-    #     elif values[0] == 'false':
-    #         query = query.filter(database.Plan.color_code == 'not-present')
-    #         results = [p.to_dict() for p in query.all()]
-    # elif dimension == 'plan':
-    #     plan = plan_by_company_name(g.db, values[0], values[1], state)
-    #     results = [plan.to_dict()]
-    # elif dimension is None:
-    #     results = [p.to_dict() for p in query.all()]
-    # return jsonify({'plans': results})
+    def plan_filter (plan):
+        if exchange_code and plan.color_code != exchange_code:
+            return False
+        if plan_name and not re.search(plan_name, plan.name):
+            return False
+        return True
+
+
+    plans = g.db.query(database.Plan).filter(database.Plan.state == state).all()
+    matching_plans = filter(plan_filter, plans)
 
     r = make_response()
     r.status_code = 200
     r.headers['Content-type'] = 'application/json'
-    r.data = json.dumps([reports.plan_summary(p) for p in results])
+    r.data = json.dumps([reports.plan_summary(p) for p in matching_plans])
     return r
 
 @app.route('/api/v1/companies')

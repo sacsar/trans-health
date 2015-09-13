@@ -34,14 +34,14 @@ class BasicCheck (spec.Spec, unittest.TestCase):
 
         self.assertEqual(cigna_plan, target)
 
-    @unittest.skip
     def test_get_by_exchange (self):
         r = requests.get('%s/api/v1/search' % (server_uri,),
-                         params={'state': 'TX', 'exchange': True})
+                         params={'state': 'TX', 'exchange_code': 'bronze'})
         self.assertEqual(r.status_code, requests.codes.ok)
-        self.assertEqual(len(r.json()), 6)
-        self.assertIn({'company': 'Humana', 'plan-name': 'blue Advantage Bronze HMO', 'state': 'TX', 'type': 'bronze'}, r.json())
+        self.assertEqual(len(r.json()), 3)
+        self.assertIn(cigna_plan, r.json())
 
+    # We actually have to continue skipping this one, and anything else that modifies the database, until we can build infrastructure for destroying and recreating the database. Would be nice. Must be hand tested. Much sadness.
     @unittest.skip
     def test_add_experience (self):
         payload = {'date': '2015-08-22',
