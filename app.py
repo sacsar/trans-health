@@ -70,33 +70,78 @@ def post_plan():
 
 @app.route('/api/v1/search')
 def search_plan():
+    def scan_coverage (statements, procedure, status):
+        return [s for s in statements if s.procedure == procedure and s.covered == status]
+
+    def classify_care (care):
+        if care in ['Cyproterone', 'Spironolactone', 'Finasteride', 'Estradiol', 'Progesterone', 'Testosterone', 'GnRH analogue']:
+            return 'hormones'
+        if care in ['Facial Feminization', 'Mastectomy', 'Phalloplasty', 'Vaginaplasty', 'Labiaplasty', 'Breast Augmentation', 'Orchiectomy', 'Hystorectomy', 'Oophorectomy', 'Metoidioplasty']:
+            return 'surgery'
+        if care in ['Therapy', 'Voice training']:
+            return 'other'
+
+    def scan_experience (experiences, classification, success):
+        return [s for s in experiences if classify_care(s.experience) == classification and s.success == success]
+
+    def plan_summary (plan):
+        return {
+            'company': plan.company.name,
+            'plan': plan.name,
+            'state': plan.state,
+            'exchange': plan.color_code,
+            'medicaid': plan.medicaid,
+            'coverage': {
+                'hormones': {
+                    'yes': len(scan_coverage(plan.coverage_statements, 'Hormone Replacement Therapy', 'true')),
+                    'no': len(scan_coverage(plan.coverage_statements, 'Hormone Replacement Therapy', 'false')),
+                    'unknown': len(scan_coverage(plan.coverage_statements, 'Hormone Replacement Therapy', 'unknown'))
+                    },
+                'surgery': {
+                    'yes': len(scan_coverage(plan.coverage_statements, 'Surgery', 'true')),
+                    'no': len(scan_coverage(plan.coverage_statements, 'Surgery', 'false')),
+                    'unknown': len(scan_coverage(plan.coverage_statements, 'Surgery', 'unknown'))
+                    }
+                }
+            'claims': {
+            }
+
     state = request.args.get('state')
-    dimension = request.args.get('dimension', None)
-    values = request.args.get('values', None)
-    results = []
-    query = g.db.query(database.Plan).filter(database.Plan.state == state)
-    if dimension == 'company':
-        company = company_by_name(g.db, values[0])
-        if company is None:
-            results = []
-        else:
-            results = [p.to_dict() for p in company.plans]
-    elif dimension == 'procedure':
-        # looking for plans where someone has reported coverage
-        results = []
-    elif dimension == 'exchange':
-        if values[0] == 'true':
-            query = query.filter(database.Plan.color_code != 'not-present')
-            results = [p.to_dict() for p in query.all()]
-        elif values[0] == 'false':
-            query = query.filter(database.Plan.color_code == 'not-present')
-            results = [p.to_dict() for p in query.all()]
-    elif dimension == 'plan':
-        plan = plan_by_company_name(g.db, values[0], values[1], state)
-        results = [plan.to_dict()]
-    elif dimension is None:
-        results = [p.to_dict() for p in query.all()]
-    return jsonify({'plans': results})
+    results = g.db.query(database.Plan).filter(database.Plan.state == state).all()
+    print(results)
+
+    # dimension = request.args.get('dimension', None)
+    # values = request.args.get('values', None)
+    # results = []
+    # query = g.db.query(database.Plan).filter(database.Plan.state == state)
+    # if dimension == 'company':
+    #     company = company_by_name(g.db, values[0])
+    #     if company is None:
+    #         results = []
+    #     else:
+    #         results = [p.to_dict() for p in company.plans]
+    # elif dimension == 'procedure':
+    #     # looking for plans where someone has reported coverage
+    #     results = []
+    # elif dimension == 'exchange':
+    #     if values[0] == 'true':
+    #         query = query.filter(database.Plan.color_code != 'not-present')
+    #         results = [p.to_dict() for p in query.all()]
+    #     elif values[0] == 'false':
+    #         query = query.filter(database.Plan.color_code == 'not-present')
+    #         results = [p.to_dict() for p in query.all()]
+    # elif dimension == 'plan':
+    #     plan = plan_by_company_name(g.db, values[0], values[1], state)
+    #     results = [plan.to_dict()]
+    # elif dimension is None:
+    #     results = [p.to_dict() for p in query.all()]
+    # return jsonify({'plans': results})
+
+    r = make_response()
+    r.status_code = 200
+    r.headers['Content-type'] = 'application/json'
+    r.data = json.dumps([plan_summary(p) for p in results])
+    return r
 
 @app.route('/api/v1/companies')
 def company_list():
