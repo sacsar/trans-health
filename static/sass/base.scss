@@ -3,6 +3,10 @@ $primary-color: #5bcefa;
 $secondary-color: #f5a9b8;
 
 @import 'utilities/mixins';
+
+body {
+    background-color: desaturate(lighten($secondary-color, 18%), 50%);
+}
 .text {
     &__primary {
         color: $primary-color;
