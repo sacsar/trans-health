@@ -112,6 +112,14 @@ def company_list():
     companies = g.db.query(database.Company).all()
     return jsonify({'companies': [c.name for c in companies]})
 
+@app.route('/api/v1/services')
+def service_list():
+    r = make_response()
+    r.status_code = 200
+    r.headers['Content-type'] = 'application/json'
+    r.data = json.dumps(reports.service_types)
+    return r
+
 def company_by_name(session, name):
     company = session.query(database.Company).filter(database.Company.name == name).all()
     return company[0] if len(company) > 0 else None

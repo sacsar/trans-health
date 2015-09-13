@@ -63,6 +63,12 @@ class BasicCheck (spec.Spec, unittest.TestCase):
                           data=json.dumps(payload))
         self.assertEqual(r.status_code, requests.codes.ok)
 
+    def test_service_list (self):
+        r = requests.get('%s/api/v1/services' % (server_uri,))
+        print(r.text)
+        self.assertEqual(r.json().get('Estradiol'), 'hormones')
+        self.assertEqual(r.json().get('Facial Feminization'), 'surgery')
+
 cigna_plan = {
     'company': 'Cigna',
     'plan': 'myCigna Health Savings',

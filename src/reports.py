@@ -29,7 +29,7 @@ def plan_summary (plan):
         }
 
 
-care_types = {
+service_types = {
     'Cyproterone': 'hormones',
     'Spironolactone': 'hormones',
     'Finasteride': 'hormones',
@@ -74,7 +74,7 @@ def tally_experiences (experiences):
           'other': []
          }
     for (procedure_name, counts) in results.items():
-        type_ = care_types[procedure_name]
+        type_ = service_types[procedure_name]
         tr[type_].append({ 'name': procedure_name,
                            'yes': counts['yes'],
                            'no': counts['no'],
