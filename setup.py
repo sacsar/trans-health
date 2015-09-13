@@ -12,6 +12,8 @@ setup(
         "coverage",
         "spec",
         "flask",
+        "SQLAlchemy",
+        "requests",
         "nose"
     ]
 )

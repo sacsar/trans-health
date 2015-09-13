@@ -93,10 +93,15 @@ Flask API
 
 Endpoints
 ---------
-*   POST /api/v1/incident
+*   POST /api/v1/experience
 *   POST /api/v1/plan
-*   GET /api/v1/search/\<state\>/\<dimension\>/\<value\>, where dimension = [company, procedure, exchange (t/f), medicaid(t/f)]
-*   GET /api/v1/search/\<state\> all plans in a state
+*   GET /api/v1/search
+    *   state (required)
+    *   dimension: one-of "company", "procedure", "exchange", "plan" (optional)
+    *   values (required if dimension is provided)
+    *   { 'plans': [plan response] }
+*   GET /api/v1/companies
+    *   { 'companies': [ list of companies ] }
 
 API Data Structures
 -------------------
@@ -107,7 +112,7 @@ Report JSON:
       age:
       plan:
       company:
-      procedure: [ { name:
+      procedures: [ { name:
                      success:
                     }
                  ]
@@ -126,12 +131,14 @@ Plan JSON (for POST):
     }
 
 Plan Reponse:
-    
+
     { state:
       company:
       plan-name:
       type:
-
+      plan-document-available:
+      coverage-criteria-availabe:
+      formulary-available:
     }
 
 Reports and Views
@@ -170,3 +177,24 @@ Searches
 *   Medicaid plans
 
 I do not know what the search should make easily visible.
+
+
+Database Access
+===============
+
+    (env)savanni@conway:~/src/trans-health$ PYTHONPATH=src python
+    Python 3.4.3 (default, Mar 26 2015, 22:03:40)
+    [GCC 4.9.2] on linux
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> import database
+    >>> s = database.connect('trans-health.db')
+    >>> s.query(database.Company).all()
+    [<database.Company object at 0x7f29e4a5dd30>]
+    >>> s.add(database.Plan(company_id=1, name='Super Plan!', state='TX', color_code='None', medicaid=True)
+    ... )
+    >>> s.query(database.Plan).all()
+    [<database.Plan object at 0x7f29e4a885c0>]
+
+To-Do
+=====
+*   Need to allow for people submitting/updating plans that already exist
