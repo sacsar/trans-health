@@ -22,7 +22,6 @@ class BasicCheck (spec.Spec, unittest.TestCase):
         self.assertEqual(r.json(), {"companies": ["Humana", "Blue Cross and Blue Shield", "Cigna", "Amerigroup"]})
 
     def test_get_plans (self):
-        # r = requests.get('%s/api/v1/search/%s' % (server_uri, json.dumps({'state': 'TX'})))
         r = requests.get('%s/api/v1/search' % (server_uri,),
                          params={'state': 'TX'})
         self.assertEqual(r.status_code, requests.codes.ok)
@@ -37,7 +36,6 @@ class BasicCheck (spec.Spec, unittest.TestCase):
 
     @unittest.skip
     def test_get_by_exchange (self):
-        # r = requests.get('%s/api/v1/search/%s' % (server_uri, json.dumps({'state': 'TX', 'exchange': True})))
         r = requests.get('%s/api/v1/search' % (server_uri,),
                          params={'state': 'TX', 'exchange': True})
         self.assertEqual(r.status_code, requests.codes.ok)
