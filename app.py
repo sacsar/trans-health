@@ -70,19 +70,60 @@ def post_plan():
 
 @app.route('/api/v1/search')
 def search_plan():
+    care_types = {
+        'Cyproterone': 'hormones',
+        'Spironolactone': 'hormones',
+        'Finasteride': 'hormones',
+        'Estradiol': 'hormones',
+        'Progesterone': 'hormones',
+        'Testosterone': 'hormones',
+        'GnRH analogue': 'hormones',
+        'Facial Feminization': 'surgery',
+        'Mastectomy': 'surgery',
+        'Phalloplasty': 'surgery',
+        'Vaginaplasty': 'surgery',
+        'Labiaplasty': 'surgery',
+        'Breast Augmentation': 'surgery',
+        'Orchiectomy': 'surgery',
+        'Hystorectomy': 'surgery',
+        'Oophorectomy': 'surgery',
+        'Metoidioplasty': 'surgery',
+        'Therapy': 'other',
+        'Voice Training': 'other'
+        }
+
     def scan_coverage (statements, procedure, status):
         return [s for s in statements if s.procedure == procedure and s.covered == status]
 
-    def classify_care (care):
-        if care in ['Cyproterone', 'Spironolactone', 'Finasteride', 'Estradiol', 'Progesterone', 'Testosterone', 'GnRH analogue']:
-            return 'hormones'
-        if care in ['Facial Feminization', 'Mastectomy', 'Phalloplasty', 'Vaginaplasty', 'Labiaplasty', 'Breast Augmentation', 'Orchiectomy', 'Hystorectomy', 'Oophorectomy', 'Metoidioplasty']:
-            return 'surgery'
-        if care in ['Therapy', 'Voice training']:
-            return 'other'
-
     def scan_experience (experiences, classification, success):
         return [s for s in experiences if classify_care(s.experience) == classification and s.success == success]
+
+    def tally_experiences (experiences):
+        results = {}
+        for exp in experiences:
+            if exp.procedure not in results:
+                results[exp.procedure] = {'yes': 0, 'no': 0}
+            if exp.success:
+                results[exp.procedure]['yes'] += 1
+            else:
+                results[exp.procedure]['no'] += 1
+
+        tr = {'hormones': [],
+              'surgery': [],
+              'other': []
+             }
+        for (procedure_name, counts) in results.items():
+            type_ = care_types[procedure_name]
+            tr[type_].append({ 'name': procedure_name,
+                               'yes': counts['yes'],
+                               'no': counts['no'],
+                               'count': counts['yes'] + counts['no']
+                             })
+
+        tr['hormones'] = sorted(tr['hormones'], key=lambda x: x['name'])
+        tr['surgery'] = sorted(tr['surgery'], key=lambda x: x['name'])
+        tr['other'] = sorted(tr['other'], key=lambda x: x['name'])
+        return tr
 
     def plan_summary (plan):
         return {
@@ -102,13 +143,12 @@ def search_plan():
                     'no': len(scan_coverage(plan.coverage_statements, 'Surgery', 'false')),
                     'unknown': len(scan_coverage(plan.coverage_statements, 'Surgery', 'unknown'))
                     }
-                }
-            'claims': {
+                },
+            'claims': tally_experiences(plan.incidents)
             }
 
     state = request.args.get('state')
     results = g.db.query(database.Plan).filter(database.Plan.state == state).all()
-    print(results)
 
     # dimension = request.args.get('dimension', None)
     # values = request.args.get('values', None)
@@ -152,8 +192,8 @@ def company_by_name(session, name):
     company = session.query(database.Company).filter(database.Company.name == name).all()
     return company[0] if len(company) > 0 else None
 
-def plan_by_company_name(session, company, plan_name, state):
-    company = company_by_name(session, company)
+def plan_by_company_name(session, company_name, plan_name, state):
+    company = company_by_name(session, company_name)
     plan = [p for p in company.plans if p.state == state
             and p.name == plan_name][0]
     return plan

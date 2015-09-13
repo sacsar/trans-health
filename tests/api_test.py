@@ -29,14 +29,10 @@ class BasicCheck (spec.Spec, unittest.TestCase):
         self.assertEqual(len(r.json()), 6)
 
         self.maxDiff = None
-        print(r.text)
-
         target = [p for p in r.json() if p['company'] == 'Cigna' and
                                          p['plan'] == 'myCigna Health Savings' and
                                          p['state'] == 'TX'][0]
 
-        print(cigna_plan)
-        print(target)
         self.assertEqual(cigna_plan, target)
 
     @unittest.skip
@@ -94,7 +90,8 @@ cigna_plan = {
         ],
         'surgery': [
             {'name': 'Facial Feminization', 'yes': 1, 'no': 0, 'count': 1}
-        ]
+        ],
+        'other': []
     }
 }
 
