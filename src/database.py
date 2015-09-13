@@ -9,6 +9,10 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+'''
+*   "Service" represents a particular service. This is a particular medication, surgical procedure, voice training, therapy, or anything else that gets added later.
+*   "Service type" classifies groups of services and is most relevant for actually reading a medical plan. These are 'other', 'surgery', and 'medication'
+'''
 
 def connect (db_path):
     engine = create_engine('sqlite:///%s' % db_path)
@@ -52,21 +56,23 @@ class Plan (Base):
                 }
 
 
-class Incident (Base):
-    __tablename__ = 'incident'
+class Experience (Base):
+    ''' Experience represents a particular instance of attempting to acquire insurance coverage for a specific Service. '''
+    __tablename__ = 'experience'
     id = Column(Integer, primary_key=True)
     date = Column(Date, nullable=False)
     age = Column(Integer, nullable=True)
 
     plan_id = Column(Integer, ForeignKey('plan.id'), nullable=False)
-    plan = relationship(Plan, backref=backref('incidents', uselist=True))
+    plan = relationship(Plan, backref=backref('experiences', uselist=True))
 
-    procedure = Column(String(250), nullable=False)
-    stated_gender = Column(Enum('M', 'F', 'U'), nullable=False)
+    service = Column(String(250), nullable=False)
+    documented_gender = Column(Enum('M', 'F', 'U'), nullable=False)
     success = Column(Boolean, nullable=False)
 
 
 class CoverageStatement (Base):
+    ''' A coverage statement is a report, from a user, of whether they believe that a type of service (medication, surgery, or other) will be covered by the insurance plan based on information published by the insurance company. '''
     __tablename__ = 'coverage_statement'
     id = Column(Integer, primary_key=True)
     date = Column(Date, nullable=False)
@@ -74,11 +80,15 @@ class CoverageStatement (Base):
     plan_id = Column(Integer, ForeignKey('plan.id'), nullable=False)
     plan = relationship(Plan, backref=backref('coverage_statements', uselist=True))
 
-    procedure = Column(String(250), nullable=False)
-    covered = Column(Enum('true', 'false', 'unknown'), nullable=False)
+    service_type = Column(Enum('medication', 'surgery', 'other'), nullable=False)
+    covered = Column(Enum('yes', 'no', 'unknown'), nullable=False)
 
 
 class Documents (Base):
+    ''' A Document is a link to a product brochure, statement of coverage, or some other useful information. It should be associated with a Coverage Statement as a way of supporting "this is what *I* was reading when I submitted my report".
+
+    Due to time and UI design constraints, this database is not actually being used at this time.
+    '''
     __tablename__ = 'documents'
     id = Column(Integer, primary_key=True)
 

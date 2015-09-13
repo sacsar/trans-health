@@ -1,6 +1,9 @@
 <div class="row">
+    <h1 class="col-xs-12">Share your experience</h1>
 	<form>
-		<label for="state" class="control-label">State <span class="text__primary">*</span></label>
+        <h2 class="col-xs-12">General Information</h2>
+        <div class="form-group col-xs-12 col-sm-2">
+            <label for="state" class="control-label">State <span class="text__primary">*</span></label>
             <select id="state" class="form-control" data-ng-model="state">
                 <option selected></option>
                 <option>AL</option>
@@ -54,25 +57,64 @@
                 <option>WI</option>
                 <option>WY</option>
             </select>
+        </div>
+        
+        <div class="form-group col-xs-12 col-sm-5">
+            <label for="company" class="control-label">Company <span class="text__primary">*</span></label>
+            
+            <input list="companies" id="company" class="form-control" data-ng-model="company"/>
+            <datalist id="companies">
+                <option>Humana</option>
+                <option>Cigna</option>
+                <option>Aetna</option>
+                <option>Blue Cross Blue Shield</option>
+            </datalist>
+        </div>
+        
+        <div class="form-group col-xs-12 col-sm-5">
+            <label for="plan" class="control-label">Plan <span class="text__primary">*</span></label>
+            <input list="plans" id="plan" class="form-control" data-ng-model="plan"/>
+            <datalist id="plans">
+                <option>Bronze A</option>
+                <option>Bronze B</option>
+                <option>Basic Plan</option>
+            </datalist>
+        </div>
+        
+        <div class="form-group col-xs-12 col-sm-8">
+            <label>Gender on your health insurance <span class="text__primary">*</span></label>
 
-        <label for="company" class="control-label">Company<span class="text__primary">*</span></label>
-        <input type="search" id="company" class="form-control" data-ng-model="company"/>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="radio"></div>
+                    <div class="radio col-xs-4 gender">
+                        <label>
+                            <input name="gender" type="radio" value="male" data-ng-model="gender" data-ng-true-value="male" required />
+                            Male
+                        </label>
+                    </div>
 
+                    <div class="radio col-xs-4 gender">
+                        <label>
+                            <input name="gender" type="radio" value="female" data-ng-model="gender" data-ng-true-value="female" required />
+                            Female
+                        </label>                
+                    </div>
 
-        <label for="plan" class="control-label">Plan<span class="text__primary">*</span></label>
-        <input type="search" id="company" class="form-control" data-ng-model="plan"/>
-
-        <label for="gender" class="control-label">Gender on your health insurance<span class="text__primary">*</span></label>
-        <select id="gender" class="form-control" data-ng-model="gender">
-        	<option>F</option>
-        	<option>M</option>
-        	<option>I don't know</option>
-        </select>
-
-        <label for="age" class="control-label">How old <i>were</i> you?</label>
-        <select id="age" class="form-control" data-ng-model="age">
-        	<option ng-repeat="a in ages">{{a}}</option>
-        </select>
+                    <div class="radio col-xs-4 gender">
+                        <label>
+                            <input name="gender" type="radio" value="unknown" data-ng-model="gender" data-ng-true-value="unknown" required />
+                            I don't know
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group col-xs-12 col-sm-4">
+            <label for="age" class="control-label">How old were you?</label>
+            <input type="number" class="form-control" max="150" min="1" />
+        </div>
 
 		<label for="service" class="control-label">What kind of care did you try to have covered?</label>
 		<select id="service" class="form-control" data-ng-model="service">

@@ -4,6 +4,7 @@ import json
 import datetime
 
 import src.database as database
+import src.reports as reports
 
 
 app = Flask(__name__)
@@ -31,84 +32,124 @@ def post_experience():
                                 data['company'],
                                 data['plan'],
                                 data['state'])
-    # there may be multiple procedures in one request
-    incidents = []
-    for procedure in data['services']:
-        incident = database.Incident(date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
-                                           plan_id=plan.id,
-                                           stated_gender=data['gender'],
-                                           service=procedure['name'],
-                                           success=procedure['success'],
-                                           age=data['age'])
-        incidents.append(incident)
-    g.db.add_all(incidents)
+
+    def make_experience (service_data):
+        return database.Experience(
+                    date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
+                    plan=plan,
+                    documented_gender=data['gender'],
+                    service=service_data['name'],
+                    success=service_data['success'],
+                    age=data['age'])
+
+    # there may be multiple services in one request
+    experiences = [make_experience(service_data) for service_data in data['services']]
+    g.db.add_all(experiences)
     g.db.commit()
     r = make_response()
     r.status_code = 200
     return r
 
-@app.route('/api/v1/plan', methods=['POST'])
-def post_plan():
+@app.route('/api/v1/coverage', methods=['POST'])
+def post_coverage():
     data = request.get_json()
-    # check if the plan exists
-    add = True
-    if add:
-        # lookup company
-        company = company_by_name(data['company'])
-        if company is None:
-            # add the company
-            g.db.add(database.Company(name=name))
-            plan = database.Plan(state=data['state'],
-                                 type=data['type'],
-                                 exclusions=data['exclusions'],
-                                 company=company)
-            g.db.add(plan)
-            g.db.commit()
+    # look up by plan and company
+    plan = plan_by_company_name(g.db,
+                                data['company'],
+                                data['plan'],
+                                data['state'])
+
+    def make_coverage (service_type_data):
+        return database.CoverageStatement(
+                    date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
+                    plan=plan,
+                    service_type=service_type_data['name'],
+                    covered=service_type_data['covered'])
+
+    # there may be multiple service_types in one request
+    coverage_reports = [make_coverage(service_type_data)
+                        for service_type_data in data['service_types']]
+    g.db.add_all(coverage_reports)
+    g.db.commit()
     r = make_response()
     r.status_code = 200
     return r
 
+# @app.route('/api/v1/plan', methods=['POST'])
+# def post_plan():
+#     data = request.get_json()
+#     # check if the plan exists
+#     add = True
+#     if add:
+#         # lookup company
+#         company = company_by_name(data['company'])
+#         if company is None:
+#             # add the company
+#             g.db.add(database.Company(name=name))
+#             plan = database.Plan(state=data['state'],
+#                                  type=data['type'],
+#                                  exclusions=data['exclusions'],
+#                                  company=company)
+#             g.db.add(plan)
+#             g.db.commit()
+#     r = make_response()
+#     r.status_code = 200
+#     return r
+
 @app.route('/api/v1/search')
 def search_plan():
-    state = request.args.get('state')
-    dimension = request.args.get('dimension', None)
-    values = request.args.get('values', None)
-    results = []
-    query = g.db.query(database.Plan).filter(database.Plan.state == state)
-    if dimension == 'company':
-        company = company_by_name(g.db, values[0])
-        if company is None:
-            results = []
-        else:
-            results = [p.to_dict() for p in company.plans]
-    elif dimension == 'procedure':
-        # looking for plans where someone has reported coverage
-        results = []
-    elif dimension == 'exchange':
-        if values[0] == 'true':
-            query = query.filter(database.Plan.color_code != 'not-present')
-            results = [p.to_dict() for p in query.all()]
-        elif values[0] == 'false':
-            query = query.filter(database.Plan.color_code == 'not-present')
-            results = [p.to_dict() for p in query.all()]
-    elif dimension == 'plan':
-        plan = plan_by_company_name(g.db, values[0], values[1], state)
-        results = [plan.to_dict()]
-    elif dimension is None:
-        results = [p.to_dict() for p in query.all()]
-    return jsonify({'plans': results})
+    state           = request.args.get('state')
+    exchange_code   = request.args.get('exchange_code')
+    plan_name       = request.args.get('plan_name')
+
+    def plan_filter (plan):
+        if exchange_code and plan.color_code != exchange_code:
+            return False
+        if plan_name and not re.search(plan_name, plan.name):
+            return False
+        return True
+
+
+    plans = g.db.query(database.Plan).filter(database.Plan.state == state).all()
+    matching_plans = filter(plan_filter, plans)
+
+    r = make_response()
+    r.status_code = 200
+    r.headers['Content-type'] = 'application/json'
+    r.data = json.dumps([reports.plan_summary(p) for p in matching_plans])
+    return r
 
 @app.route('/api/v1/companies')
 def company_list():
     companies = g.db.query(database.Company).all()
     return jsonify({'companies': [c.name for c in companies]})
 
+@app.route('/api/v1/plans')
+def plans_list():
+   the_plans = g.db.query(database.Plan).all()
+   r = make_response()
+   r.status_code = 200
+   r.headers['Content-type'] = 'application/json'
+   r.data = json.dumps([{'state': p.state,
+                    'company': p.company.name,
+                    'plan': p.name}
+                     for p in the_plans])
+   return r
+
+@app.route('/api/v1/services')
+def service_list():
+    r = make_response()
+    r.status_code = 200
+    r.headers['Content-type'] = 'application/json'
+    r.data = json.dumps(reports.service_types)
+    return r
+
 def company_by_name(session, name):
     company = session.query(database.Company).filter(database.Company.name == name).all()
     return company[0] if len(company) > 0 else None
 
-def plan_by_company_name(session, company, plan_name, state):
-    company = company_by_name(session, company)
+def plan_by_company_name(session, company_name, plan_name, state):
+    company = company_by_name(session, company_name)
     plan = [p for p in company.plans if p.state == state
             and p.name == plan_name][0]
     return plan
