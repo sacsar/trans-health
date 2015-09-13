@@ -1,6 +1,6 @@
-.gender {
+.radio-btn {
+
     label {
-        background-color: $primary-color;
         @include border-radius(.3em);
         display: block;
         
@@ -9,15 +9,21 @@
         color: #fff;
         
         opacity: .5;
-        
-        input {
-            display: none;
+    }
+    
+    &__primary label {
+        background-color: $primary-color;
+    }
+    
+    &__secondary label {
+        background-color: $secondary-color;
+    }
+    
+    input {
+        display: none;
 
-            &:checked {
-                label & {
-                    opacity: 1;
-                }
-            }
+        &:checked ~ label {
+            opacity: 1;
         }
     }
 }

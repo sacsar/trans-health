@@ -10,7 +10,8 @@ transHealthApp.config(function($routeProvider) {
         reloadOnSearch: false
     })
     .when('/share/plan', {
-        templateUrl: 'app/components/share-plan/share-plan.html',
+        templateUrl: 'app/components/share/share-plan.html',
+        controller: 'sharePlanController'
     })
     .when('/share/experience', {
         templateUrl: 'app/components/share-experience/share-experience.html',
