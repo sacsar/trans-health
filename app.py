@@ -4,6 +4,7 @@ import json
 import datetime
 
 import src.database as database
+import src.reports as reports
 
 
 app = Flask(__name__)
@@ -94,117 +95,25 @@ def post_plan():
 
 @app.route('/api/v1/search')
 def search_plan():
-    care_types = {
-        'Cyproterone': 'hormones',
-        'Spironolactone': 'hormones',
-        'Finasteride': 'hormones',
-        'Estradiol': 'hormones',
-        'Progesterone': 'hormones',
-        'Testosterone': 'hormones',
-        'GnRH analogue': 'hormones',
-        'Facial Feminization': 'surgery',
-        'Mastectomy': 'surgery',
-        'Phalloplasty': 'surgery',
-        'Vaginaplasty': 'surgery',
-        'Labiaplasty': 'surgery',
-        'Breast Augmentation': 'surgery',
-        'Orchiectomy': 'surgery',
-        'Hystorectomy': 'surgery',
-        'Oophorectomy': 'surgery',
-        'Metoidioplasty': 'surgery',
-        'Therapy': 'other',
-        'Voice Training': 'other'
-        }
+    state           = request.args.get('state')
+    exchange_code   = request.args.get('exchange_code')
+    plan_name       = request.args.get('plan_name')
 
-    def scan_coverage (statements, procedure, status):
-        return [s for s in statements if s.procedure == procedure and s.covered == status]
+    def plan_filter (plan):
+        if exchange_code and plan.color_code != exchange_code:
+            return False
+        if plan_name and not re.search(plan_name, plan.name):
+            return False
+        return True
 
-    def scan_experience (experiences, classification, success):
-        return [s for s in experiences if classify_care(s.experience) == classification and s.success == success]
 
-    def tally_experiences (experiences):
-        results = {}
-        for exp in experiences:
-            if exp.procedure not in results:
-                results[exp.procedure] = {'yes': 0, 'no': 0}
-            if exp.success:
-                results[exp.procedure]['yes'] += 1
-            else:
-                results[exp.procedure]['no'] += 1
-
-        tr = {'hormones': [],
-              'surgery': [],
-              'other': []
-             }
-        for (procedure_name, counts) in results.items():
-            type_ = care_types[procedure_name]
-            tr[type_].append({ 'name': procedure_name,
-                               'yes': counts['yes'],
-                               'no': counts['no'],
-                               'count': counts['yes'] + counts['no']
-                             })
-
-        tr['hormones'] = sorted(tr['hormones'], key=lambda x: x['name'])
-        tr['surgery'] = sorted(tr['surgery'], key=lambda x: x['name'])
-        tr['other'] = sorted(tr['other'], key=lambda x: x['name'])
-        return tr
-
-    def plan_summary (plan):
-        return {
-            'company': plan.company.name,
-            'plan': plan.name,
-            'state': plan.state,
-            'exchange': plan.color_code,
-            'medicaid': plan.medicaid,
-            'coverage': {
-                'hormones': {
-                    'yes': len(scan_coverage(plan.coverage_statements, 'Hormone Replacement Therapy', 'true')),
-                    'no': len(scan_coverage(plan.coverage_statements, 'Hormone Replacement Therapy', 'false')),
-                    'unknown': len(scan_coverage(plan.coverage_statements, 'Hormone Replacement Therapy', 'unknown'))
-                    },
-                'surgery': {
-                    'yes': len(scan_coverage(plan.coverage_statements, 'Surgery', 'true')),
-                    'no': len(scan_coverage(plan.coverage_statements, 'Surgery', 'false')),
-                    'unknown': len(scan_coverage(plan.coverage_statements, 'Surgery', 'unknown'))
-                    }
-                },
-            'claims': tally_experiences(plan.incidents)
-            }
-
-    state = request.args.get('state')
-    results = g.db.query(database.Plan).filter(database.Plan.state == state).all()
-
-    # dimension = request.args.get('dimension', None)
-    # values = request.args.get('values', None)
-    # results = []
-    # query = g.db.query(database.Plan).filter(database.Plan.state == state)
-    # if dimension == 'company':
-    #     company = company_by_name(g.db, values[0])
-    #     if company is None:
-    #         results = []
-    #     else:
-    #         results = [p.to_dict() for p in company.plans]
-    # elif dimension == 'procedure':
-    #     # looking for plans where someone has reported coverage
-    #     results = []
-    # elif dimension == 'exchange':
-    #     if values[0] == 'true':
-    #         query = query.filter(database.Plan.color_code != 'not-present')
-    #         results = [p.to_dict() for p in query.all()]
-    #     elif values[0] == 'false':
-    #         query = query.filter(database.Plan.color_code == 'not-present')
-    #         results = [p.to_dict() for p in query.all()]
-    # elif dimension == 'plan':
-    #     plan = plan_by_company_name(g.db, values[0], values[1], state)
-    #     results = [plan.to_dict()]
-    # elif dimension is None:
-    #     results = [p.to_dict() for p in query.all()]
-    # return jsonify({'plans': results})
+    plans = g.db.query(database.Plan).filter(database.Plan.state == state).all()
+    matching_plans = filter(plan_filter, plans)
 
     r = make_response()
     r.status_code = 200
     r.headers['Content-type'] = 'application/json'
-    r.data = json.dumps([plan_summary(p) for p in results])
+    r.data = json.dumps([reports.plan_summary(p) for p in matching_plans])
     return r
 
 @app.route('/api/v1/companies')
@@ -223,6 +132,14 @@ def plans_list():
                     'plan': p.name}
                      for p in the_plans])
    return r
+
+@app.route('/api/v1/services')
+def service_list():
+    r = make_response()
+    r.status_code = 200
+    r.headers['Content-type'] = 'application/json'
+    r.data = json.dumps(reports.service_types)
+    return r
 
 def company_by_name(session, name):
     company = session.query(database.Company).filter(database.Company.name == name).all()
