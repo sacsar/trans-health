@@ -21,7 +21,7 @@
 
         <div data-ng-if="result.claims.other.length > 0">
             <h4 class="claims--category col-xs-12">Other</h4>
-            <div data-ng-repeat="other in result.claims.others" class="claims--item">
+            <div data-ng-repeat="other in result.claims.other" class="claims--item">
                 <div class="col-xs-5">{{ other.name }}</div>
                 <div class="col-xs-47">{{ other.yes / other.count | percentage }} success</div>
             </div>
