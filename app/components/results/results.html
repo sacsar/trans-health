@@ -1,8 +1,64 @@
-<div class="row">
-
-    <div data-ng-repeat="result in results | filter: state | filter: search"  class="results--item col-xs-12 col-md-8">
-        <h3>{{ result.company }} {{ result.plan }}</h3>
-        <small class="results--tag">{{ result.state }}</small><small data-ng-repeat="tag in result.tags" class="results--tag">{{ tag }}</small>
+<!--<aside class="hidden-xs hidden-sm col-md-4 filters">
+    <h4>Filters</h4>
+    <div class="filters--category">
+        <h5>Company</h5>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" />
+                Company A
+            </label>
+        </div>
+        
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" />
+                Company A
+            </label>
+        </div>
     </div>
+    
+</aside>-->
 
+<div class="col-xs-12 col-md-8">
+    <article data-ng-repeat="result in results | filter:company | filter:basic"  class="results--item col-xs-12">
+        <div class="results--item--header">
+            <h3><strong>{{ result.company }}</strong>: {{ result.plan }}</h3>
+            <small data-ng-if="result.exchange"><strong>Type:</strong> Healthcare Exchange - {{ result.exchange }}</small>
+            <small data-ng-if="result.medicaid"><strong>Type:</strong> Medicaid</small>
+        </div>
+        <div class="row coverage">
+            <div class="col-xs-12 col-sm-3">
+                <h4>Plan Coverage:</h4>
+            </div>
+            <div class="results-categories--header">
+                <div class="col-xs-4 col-sm-3">
+                    <h5>Hormones</h5>
+                </div>
+
+                <div class="col-xs-4 col-sm-3">
+                    <h5>Surgeries</h5>
+                </div>
+
+                <div class="col-xs-4 col-sm-3">
+                    <h5>Number of responses</h5>
+                </div>
+            </div>
+            <div class="results-categories--numbers">
+                <div class="col-xs-4 col-sm-3">
+                    <p class="lead">{{ result.coverage.hormones.yes / result.coverage.count | percentage }}</p>
+                </div>
+
+                <div class="col-xs-4 col-sm-3">
+                    <p class="lead">{{ result.coverage.surgery.yes / result.coverage.count | percentage }}</p>
+                </div>
+
+                <div class="col-xs-4 col-sm-3">
+                    <p class="lead">{{ result.coverage.count }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row claims" result-expand>
+        </div>
+    </article>
 </div>

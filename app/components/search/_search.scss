@@ -1,0 +1,10 @@
+.search {
+    background-color: lighten($secondary-color, 15%);
+    padding: 1em;
+    overflow: hidden;
+    margin-top: 1em;
+    
+    &--button{
+        margin-top: 1.7em;
+    }
+}
