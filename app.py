@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, g, request, make_response
+from flask import Flask, jsonify, g, request, make_response, send_from_directory
 import urllib.parse
 import json
 import datetime
@@ -21,6 +21,14 @@ def teardown_request(exception):
     if db is not None:
         db.commit()
         db.close()
+
+@app.route('/')
+def index():
+    return send_from_directory('', 'index.html', cache_timeout=0)
+
+@app.route('/app/<path:path>')
+def js(path):
+    return send_from_directory('app', path, cache_timeout=0)
 
 # Add some API routes
 
