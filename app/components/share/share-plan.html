@@ -1,6 +1,11 @@
 <div class="row">
+    <div class="col-xs-12">
+        <h1>Share about a plan</h1>
+        <p>Tell us about your health insurance. If you have ever had gender reassignment care fill out this form. If you want to share more broadly about an existing insurance plan please go <a href="">here</a>.</p>
+    </div>
     <form>
-        <!--<div share-general></div>-->
+        <h2 class="col-xs-12">Tell us about your plan</h2>
+        <div class="form-group col-xs-12 col-sm-2">
             <label for="state" class="control-label">State <span class="text__primary">*</span></label>
             <select id="state" class="form-control" data-ng-model="state">
                 <option selected></option>
@@ -55,53 +60,103 @@
                 <option>WI</option>
                 <option>WY</option>
             </select>
-
-        <label for="company" class="control-label">Company<span class="text__primary">*</span></label>
-        <input type="search" id="company" class="form-control" data-ng-model="company"/>
-
-
-        <label for="plan" class="control-label">Plan<span class="text__primary">*</span></label>
-        <input type="search" id="company" class="form-control" data-ng-model="plan"/>
-
-        <h4>Is all transition-related care excluded?</h4>
-        <div class="radio">
-            <label>
-                <input type="radio" name="all-excluded" data-ng-model="allExcluded" value="yes">
-                Yes
-            </label>
-        </div>
-        <div class="radio">
-            <label>
-                <input type="radio" name="all-excluded" data-ng-model="allExcluded" value="no">
-                No
-            </label>
         </div>
 
-        <div ng-show="allExcluded == 'no'">
-            <h4>Is hormone therapy/medication excluded?</h4>
-            <div class="radio">
-                <label>
-                <input type="radio" name="hormones-excluded" data-ng-model="hormonesExcluded" value="yes">Yes
-            </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="hormones-excluded" data-ng-model="hormonesExcluded" value="no">No
-                </label>
-            </div>
+        <div class="form-group col-xs-12 col-sm-5">
+            <label for="company" class="control-label">Company <span class="text__primary">*</span></label>
+            
+            <input list="companies" id="company" class="form-control" data-ng-model="company"/>
+            <datalist id="companies">
+                <option>Humana</option>
+                <option>Cigna</option>
+                <option>Aetna</option>
+                <option>Blue Cross Blue Shield</option>
+            </datalist>
+        </div>
+        
+        <div class="form-group col-xs-12 col-sm-5">
+            <label for="plan" class="control-label">Plan <span class="text__primary">*</span></label>
+            <input list="plans" id="plan" class="form-control" data-ng-model="plan"/>
+            <datalist id="plans">
+                <option>Bronze A</option>
+                <option>Bronze B</option>
+                <option>Basic Plan</option>
+            </datalist>
+        </div>
+        
+        
+        <h2 class="col-xs-12">Tell us about plan exclusion</h2>
+        <div class="form-group col-xs-12">
+            <label>Is all transition-related care excluded?</label>
 
-            <h4>Is surgery excluded?</h4>
-            <div class="radio">
-                <label>
-                <input type="radio" name="surgery-excluded" data-ng-model="surgeryExcluded" value="yes">Yes
-            </label>
-            </div>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="surgery-excluded" data-ng-model="surgeryExcluded" value="no">No
-                </label>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="radio"></div>
+                    <div class="radio col-xs-6 radio-btn radio-btn__primary">
+                        <input name="allExcluded" id="all-yes" type="radio" value="yes" data-ng-model="allExcluded" data-ng-true-value="yes" required />
+                        <label for="all-yes">
+                            Yes
+                        </label>
+                    </div>
+
+                    <div class="radio col-xs-6 radio-btn radio-btn__primary">
+                        <input name="allExcluded" id="all-no" type="radio" value="no" data-ng-model="allExcluded" data-ng-true-value="no" required />
+                        <label for="all-no">
+                            No
+                        </label>                
+                    </div>
+                </div>
             </div>
         </div>
-        <button ng-click="submitplan()">Submit</button>
+
+        <div data-ng-show="allExcluded == 'no'">
+            <div class="form-group col-xs-12 col-sm-6">
+                <label>Is hormone therapy/medication excluded?</label>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="radio"></div>
+                        <div class="radio col-xs-6 radio-btn radio-btn__secondary">
+                            <input name="hormones-excluded" id="hormones-yes" type="radio" value="yes" data-ng-model="hormonesExcluded" data-ng-true-value="yes" required />
+                            <label for="hormones-yes">
+                                Yes
+                            </label>
+                        </div>
+
+                        <div class="radio col-xs-6 radio-btn radio-btn__secondary">
+                            <input name="hormones-excluded" id="hormones-no" type="radio" value="no" data-ng-model="hormonesExcluded" data-ng-true-value="no" required />
+                            <label for="hormones-no">
+                                No
+                            </label>                
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group col-xs-12 col-sm-5">
+                <label>Is surgery excluded?</label>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="radio"></div>
+                        <div class="radio col-xs-6 radio-btn radio-btn__secondary">
+                            <input name="surgeryExcluded" id="surgery-yes" type="radio" value="yes" data-ng-model="surgeryExcluded" data-ng-true-value="yes" required />
+                            <label for="surgery-yes">
+                                Yes
+                            </label>
+                        </div>
+
+                        <div class="radio col-xs-6 radio-btn radio-btn__secondary">
+                            <input name="surgeryExcluded" id="surgery-no" type="radio" value="no" data-ng-model="surgeryExcluded" data-ng-true-value="no" required />
+                            <label for="surgery-no">
+                                No
+                            </label>                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-xs-12">
+            <button class="btn btn-default" data-ng-click="submitplan()">Submit</button>
+        </div>
     </form>
 </div>
