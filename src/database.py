@@ -58,7 +58,7 @@ class Plan (Base):
 
 class Experience (Base):
     ''' Experience represents a particular instance of attempting to acquire insurance coverage for a specific Service. '''
-    __tablename__ = 'service'
+    __tablename__ = 'experience'
     id = Column(Integer, primary_key=True)
     date = Column(Date, nullable=False)
     age = Column(Integer, nullable=True)
@@ -81,7 +81,7 @@ class CoverageStatement (Base):
     plan = relationship(Plan, backref=backref('coverage_statements', uselist=True))
 
     service_type = Column(Enum('medication', 'surgery', 'other'), nullable=False)
-    covered = Column(Enum('true', 'false', 'unknown'), nullable=False)
+    covered = Column(Enum('yes', 'no', 'unknown'), nullable=False)
 
 
 class Documents (Base):

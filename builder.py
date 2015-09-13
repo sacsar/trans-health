@@ -55,11 +55,11 @@ def build ():
     s.add(database.CoverageStatement(date=datetime.date(2015, 8, 1),
                                      plan=cigna,
                                      service_type="medication",
-                                     covered='true'))
+                                     covered='yes'))
     s.add(database.CoverageStatement(date=datetime.date(2015, 8, 3),
                                      plan=cigna,
                                      service_type="medication",
-                                     covered='true'))
+                                     covered='yes'))
     s.add(database.CoverageStatement(date=datetime.date(2015, 8, 5),
                                      plan=cigna,
                                      service_type="medication",
@@ -67,7 +67,7 @@ def build ():
     s.add(database.CoverageStatement(date=datetime.date(2014, 1, 10),
                                      plan=cigna,
                                      service_type="medication",
-                                     covered='false'))
+                                     covered='no'))
 
     s.add(database.Experience(date=datetime.date(2014, 12, 1),
                               age=36,
