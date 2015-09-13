@@ -62,7 +62,7 @@ class Incident (Base):
     plan = relationship(Plan, backref=backref('incidents', uselist=True))
 
     procedure = Column(String(250), nullable=False)
-    stated_gender = Column(Enum('M', 'F', 'U'), nullable=False)
+    documented_gender = Column(Enum('M', 'F', 'U'), nullable=False)
     success = Column(Boolean, nullable=False)
 
 
