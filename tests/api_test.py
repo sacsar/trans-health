@@ -66,7 +66,7 @@ class BasicCheck (spec.Spec, unittest.TestCase):
     def test_service_list (self):
         r = requests.get('%s/api/v1/services' % (server_uri,))
         print(r.text)
-        self.assertEqual(r.json().get('Estradiol'), 'hormones')
+        self.assertEqual(r.json().get('Estradiol'), 'medication')
         self.assertEqual(r.json().get('Facial Feminization'), 'surgery')
 
 cigna_plan = {
@@ -76,7 +76,7 @@ cigna_plan = {
     'exchange': 'bronze',
     'medicaid': False,
     'coverage': {
-        'hormones': {
+        'medication': {
             'yes': 2,
             'no': 1,
             'unknown': 1
@@ -88,7 +88,7 @@ cigna_plan = {
         }
     },
     'claims': {
-        'hormones': [
+        'medication': [
             {'name': 'Estradiol', 'yes': 5, 'no': 0, 'count': 5},
             {'name': 'Spironolactone', 'yes': 4, 'no': 1, 'count': 5}
         ],
@@ -107,7 +107,7 @@ cigna_plan = {
 #         "exchange": null,
 #         "medicaid": true,
 #         "coverage": {
-#             "hormones": {
+#             "medication": {
 #                 "yes": 3,
 #                 "no": 2,
 #                 "unknown": 50
@@ -119,7 +119,7 @@ cigna_plan = {
 #             }
 #         },
 #         "claims": {
-#             "hormones": [{
+#             "medication": [{
 #                 "name": "hormone 1",
 #                 "yes": 5,
 #                 "no": 10,
@@ -140,7 +140,7 @@ cigna_plan = {
 #         "exchange": "Catastrophic",
 #         "medicaid": false,
 #         "coverage": {
-#             "hormones": {
+#             "medication": {
 #                 "yes": 3,
 #                 "no": 2,
 #                 "unknown": 50
@@ -152,7 +152,7 @@ cigna_plan = {
 #             }
 #         },
 #         "claims": {
-#             "hormones": [{
+#             "medication": [{
 #                 "name": "hormone 1",
 #                 "yes": 5,
 #                 "no": 10
