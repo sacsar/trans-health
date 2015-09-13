@@ -1,0 +1,21 @@
+/*
+** DATE UPDATED:    08/12/2015
+** BY:              DIEGO HERNANDEZ
+*/
+
+// REVERSE TEXT COLOR BASED ON BACKGROUND
+@function reverse-color($background-color, $color) {
+    @if (lightness( $background-color ) <= 50) { // IF BACKGROUND COLOR IS TOO LIGHT, REVERSE TEXT COLOR TO WHITE
+        @return #FFF;
+    }
+    @else { // OR SET ACTUAL COLOR DESIRED
+        @return $color;
+    }
+}
+
+
+// DETERMINE IF VALUE IS A DIRECTIONAL VALUE (USED IN LINEAR-GRADIENT MIXIN)
+@function is-direction($value) { //CHECK IF VALUE IS A DIRECTION THEN RETURN IT
+    $is-angle: type-of($value) == 'number' and index('deg' 'grad' 'turn' 'rad', unit($value));
+    @return $is-angle;
+}

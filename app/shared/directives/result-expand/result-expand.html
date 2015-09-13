@@ -1,0 +1,23 @@
+<div class="col-xs-12 text-right">
+    <a class="claims--expand">View claim numbers <span class="glyphicon glyphicon-chevron-down claims--expand--icon"></span></a>
+</div>
+<div class="claims--list col-xs-12">
+    <div class="row">
+            <h4 class="claims--category col-xs-12" data-ng-if="result.claims.hormones">Hormones</h4>
+            <div data-ng-repeat="hormone in result.claims.hormones" class="claims--item">
+                <div class="col-xs-5">{{ hormone.name }}</div>
+                <div class="col-xs-7">{{ hormone.yes / hormone.count | percentage }} success</div>
+            </div>
+
+            <h4 class="claims--category col-xs-12" data-ng-if="result.claims.surgery">Surgeries</h4>
+            <div data-ng-repeat="surgery in result.claims.surgery" class="claims--item">
+                <div class="col-xs-5">{{ surgery.name }}</div>
+                <div class="col-xs-7">{{ surgery.yes / surgery.count | percentage }} success</div>
+            </div>
+            <h4 class="claims--category col-xs-12" data-ng-if="result.claims.others">Other</h4>
+            <div data-ng-repeat="other in result.claims.others" class="claims--item">
+                <div class="col-xs-5">{{ other.name }}</div>
+                <div class="col-xs-47">{{ other.yes / other.count | percentage }} success</div>
+        </div>
+    </div>
+</div>

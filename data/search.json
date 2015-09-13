@@ -1,0 +1,70 @@
+[
+    {
+        "state": "TX",
+        "company": "Insurance A",
+        "plan": "Bronze Plan",
+        "exchange": null,
+        "medicaid": true,
+        "coverage": {
+            "count": 173,
+            "hormones": {
+                "yes": 11,
+                "no": 12,
+                "unknown": 150
+            },
+            "surgery": {
+                "yes": 10,
+                "no": 23,
+                "unknown": 140
+            }
+        },
+        "claims": {
+            "hormones": [{
+                "name": "hormone 1",
+                "count": 15,
+                "yes": 5,
+                "no": 10
+            }],
+            "surgery": [{
+                "name": "surgery 1",
+                "count": 20,
+                "yes": 10,
+                "no": 10
+            }]
+        }
+    },
+    {
+        "state": "IL",
+        "company": "Insurance B",
+        "plan": "Basic Plan",
+        "exchange": "Catastrophic",
+        "medicaid": false,
+        "coverage": {
+            "count": 55,
+            "hormones": {
+                "yes": 3,
+                "no": 2,
+                "unknown": 50
+            },
+            "surgery": {
+                "yes": 5,
+                "no": 30,
+                "unknown": 20
+            }
+        },
+        "claims": {
+            "hormones": [{
+                "name": "hormone 1",
+                "count": 15,
+                "yes": 5,
+                "no": 10
+            }],
+            "surgery": [{
+                "name": "surgery 1",
+                "count": 20,
+                "yes": 5,
+                "no": 10
+            }]
+        }
+    }
+]

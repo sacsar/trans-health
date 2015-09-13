@@ -1,0 +1,50 @@
+/* VARIABLES */
+$primary-color: #5bcefa;
+$secondary-color: #f5a9b8;
+
+@import 'utilities/mixins';
+
+body {
+    background-color: desaturate(lighten($secondary-color, 18%), 50%);
+}
+.text {
+    &__primary {
+        color: $primary-color;
+    }
+    
+    &__secondary {
+        color: $secondary-color;
+    }
+}
+.header {
+    padding: .3em;
+    
+    background-color: $primary-color;
+    
+    &--title {
+        margin: 0;
+
+        font-size: 2em;
+
+        color: #FFF;
+    }
+}
+
+
+.btn {
+    &__primary {
+        background-color: $primary-color;
+        color: #fff;
+    }
+    
+    &__secondary {
+        background-color: $secondary-color;
+        color: #fff;
+    }
+    
+}
+
+
+/* COMPONENTS */
+@import '../../app/components/search/search';
+@import '../../app/components/results/results';
