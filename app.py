@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, g, request, make_response, send_from_directory
-import urllib.parse
 import json
 import datetime
 import requests
