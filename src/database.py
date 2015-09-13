@@ -80,7 +80,7 @@ class CoverageStatement (Base):
     plan_id = Column(Integer, ForeignKey('plan.id'), nullable=False)
     plan = relationship(Plan, backref=backref('coverage_statements', uselist=True))
 
-    service_type = Column(String(250), nullable=False)
+    service_type = Column(Enum('medication', 'surgery', 'other'), nullable=False)
     covered = Column(Enum('true', 'false', 'unknown'), nullable=False)
 
 
