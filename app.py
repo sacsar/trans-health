@@ -4,6 +4,7 @@ import json
 import datetime
 
 import src.database as database
+import src.reports as reports
 
 
 app = Flask(__name__)
@@ -70,83 +71,6 @@ def post_plan():
 
 @app.route('/api/v1/search')
 def search_plan():
-    care_types = {
-        'Cyproterone': 'hormones',
-        'Spironolactone': 'hormones',
-        'Finasteride': 'hormones',
-        'Estradiol': 'hormones',
-        'Progesterone': 'hormones',
-        'Testosterone': 'hormones',
-        'GnRH analogue': 'hormones',
-        'Facial Feminization': 'surgery',
-        'Mastectomy': 'surgery',
-        'Phalloplasty': 'surgery',
-        'Vaginaplasty': 'surgery',
-        'Labiaplasty': 'surgery',
-        'Breast Augmentation': 'surgery',
-        'Orchiectomy': 'surgery',
-        'Hystorectomy': 'surgery',
-        'Oophorectomy': 'surgery',
-        'Metoidioplasty': 'surgery',
-        'Therapy': 'other',
-        'Voice Training': 'other'
-        }
-
-    def scan_coverage (statements, procedure, status):
-        return [s for s in statements if s.procedure == procedure and s.covered == status]
-
-    def scan_experience (experiences, classification, success):
-        return [s for s in experiences if classify_care(s.experience) == classification and s.success == success]
-
-    def tally_experiences (experiences):
-        results = {}
-        for exp in experiences:
-            if exp.procedure not in results:
-                results[exp.procedure] = {'yes': 0, 'no': 0}
-            if exp.success:
-                results[exp.procedure]['yes'] += 1
-            else:
-                results[exp.procedure]['no'] += 1
-
-        tr = {'hormones': [],
-              'surgery': [],
-              'other': []
-             }
-        for (procedure_name, counts) in results.items():
-            type_ = care_types[procedure_name]
-            tr[type_].append({ 'name': procedure_name,
-                               'yes': counts['yes'],
-                               'no': counts['no'],
-                               'count': counts['yes'] + counts['no']
-                             })
-
-        tr['hormones'] = sorted(tr['hormones'], key=lambda x: x['name'])
-        tr['surgery'] = sorted(tr['surgery'], key=lambda x: x['name'])
-        tr['other'] = sorted(tr['other'], key=lambda x: x['name'])
-        return tr
-
-    def plan_summary (plan):
-        return {
-            'company': plan.company.name,
-            'plan': plan.name,
-            'state': plan.state,
-            'exchange': plan.color_code,
-            'medicaid': plan.medicaid,
-            'coverage': {
-                'hormones': {
-                    'yes': len(scan_coverage(plan.coverage_statements, 'Hormone Replacement Therapy', 'true')),
-                    'no': len(scan_coverage(plan.coverage_statements, 'Hormone Replacement Therapy', 'false')),
-                    'unknown': len(scan_coverage(plan.coverage_statements, 'Hormone Replacement Therapy', 'unknown'))
-                    },
-                'surgery': {
-                    'yes': len(scan_coverage(plan.coverage_statements, 'Surgery', 'true')),
-                    'no': len(scan_coverage(plan.coverage_statements, 'Surgery', 'false')),
-                    'unknown': len(scan_coverage(plan.coverage_statements, 'Surgery', 'unknown'))
-                    }
-                },
-            'claims': tally_experiences(plan.incidents)
-            }
-
     state = request.args.get('state')
     results = g.db.query(database.Plan).filter(database.Plan.state == state).all()
 
@@ -180,7 +104,7 @@ def search_plan():
     r = make_response()
     r.status_code = 200
     r.headers['Content-type'] = 'application/json'
-    r.data = json.dumps([plan_summary(p) for p in results])
+    r.data = json.dumps([reports.plan_summary(p) for p in results])
     return r
 
 @app.route('/api/v1/companies')
