@@ -33,11 +33,11 @@ def post_experience():
                                 data['state'])
     # there may be multiple procedures in one request
     incidents = []
-    for procedure in data['procedures']:
+    for procedure in data['services']:
         incident = database.Incident(date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
                                            plan_id=plan.id,
                                            stated_gender=data['gender'],
-                                           procedure=procedure['name'],
+                                           service=procedure['name'],
                                            success=procedure['success'],
                                            age=data['age'])
         incidents.append(incident)
