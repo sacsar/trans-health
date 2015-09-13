@@ -1,1 +1,1 @@
-var transHealthApp= angular.module('transHealthApp', ['ngRoute']);
+var transHealthApp= angular.module('transHealthApp', ['ngRoute', 'ui.bootstrap']);
