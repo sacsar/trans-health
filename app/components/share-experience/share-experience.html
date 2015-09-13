@@ -1,0 +1,98 @@
+<div class="row">
+	<form>
+		<label for="state" class="control-label">State <span class="text__primary">*</span></label>
+            <select id="state" class="form-control" data-ng-model="state">
+                <option selected></option>
+                <option>AL</option>
+                <option>AK</option>
+                <option>AZ</option>
+                <option>AR</option>
+                <option>CA</option>
+                <option>CO</option>
+                <option>CT</option>
+                <option>DE</option>
+                <option>FL</option>
+                <option>GA</option>
+                <option>HI</option>
+                <option>ID</option>
+                <option>IL</option>
+                <option>IN</option>
+                <option>IA</option>
+                <option>KS</option>
+                <option>KY</option>
+                <option>LA</option>
+                <option>ME</option>
+                <option>MD</option>
+                <option>MA</option>
+                <option>MI</option>
+                <option>MN</option>
+                <option>MS</option>
+                <option>MO</option>
+                <option>MT</option>
+                <option>NE</option>
+                <option>NV</option>
+                <option>NH</option>
+                <option>NJ</option>
+                <option>NM</option>
+                <option>NY</option>
+                <option>NC</option>
+                <option>ND</option>
+                <option>OH</option>
+                <option>OK</option>
+                <option>OR</option>
+                <option>PA</option>
+                <option>RI</option>
+                <option>SC</option>
+                <option>SD</option>
+                <option>TN</option>
+                <option>TX</option>
+                <option>UT</option>
+                <option>VT</option>
+                <option>VA</option>
+                <option>WA</option>
+                <option>WV</option>
+                <option>WI</option>
+                <option>WY</option>
+            </select>
+
+        <label for="company" class="control-label">Company<span class="text__primary">*</span></label>
+        <input type="search" id="company" class="form-control" data-ng-model="company"/>
+
+
+        <label for="plan" class="control-label">Plan<span class="text__primary">*</span></label>
+        <input type="search" id="company" class="form-control" data-ng-model="plan"/>
+
+        <label for="gender" class="control-label">Gender on your health insurance<span class="text__primary">*</span></label>
+        <select id="gender" class="form-control" data-ng-model="gender">
+        	<option>F</option>
+        	<option>M</option>
+        	<option>I don't know</option>
+        </select>
+
+        <label for="age" class="control-label">How old <i>were</i> you?</label>
+        <select id="age" class="form-control" data-ng-model="age">
+        	<option ng-repeat="a in ages">{{a}}</option>
+        </select>
+
+		<label for="service" class="control-label">What kind of care did you try to have covered?</label>
+		<select id="service" class="form-control" data-ng-model="service">
+			<option ng-repeat='s in services'>{{s}}</option>
+		</select>
+
+		<label for="outcome" class="control-label">Was it covered?</label>
+		<select id="outcome" class="form-control" data-ng-model="outcome">
+			<option>Yes</option>
+			<option>No</option>
+		</select>
+
+
+		 <p class="input-group">
+		 	<h4>When was this?</h4>
+              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+          </p>
+        <button class="btn btn-default" ng-click="submitexperience()">Submit</button>
+	</form>
+</div>
