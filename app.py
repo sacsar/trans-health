@@ -47,6 +47,29 @@ def post_experience():
     r.status_code = 200
     return r
 
+@app.route('api/v1/reportcoverage', methods=['POST'])
+def report_coverage():
+    data = request.get_json()
+    # look up by plan and company
+    plan = plan_by_company_name(g.db, 
+                                data['company'],
+                                data['plan'],
+                                data['state'])
+    # there may be multiple procedures in one request
+    coverage_reports = []
+    for procedure in data['procedures']:
+         coverage =  database.Coverage_Statement(date = datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
+                                                 plan = plan.id,
+                                                 procedure = procedure['name'],
+                                                 covered = data['covered'])
+         coverage_reports.apend(coverage)
+    g.db.add_all(incidents)
+    g.db.commit()
+    r = make_response()
+    r.status_code = 200
+    return r 
+ 
+/*
 @app.route('/api/v1/plan', methods=['POST'])
 def post_plan():
     data = request.get_json()
@@ -67,6 +90,7 @@ def post_plan():
     r = make_response()
     r.status_code = 200
     return r
+*/
 
 @app.route('/api/v1/search')
 def search_plan():
@@ -187,6 +211,18 @@ def search_plan():
 def company_list():
     companies = g.db.query(database.Company).all()
     return jsonify({'companies': [c.name for c in companies]})
+
+@app.route('/api/v1/plans')
+def plans_list():
+   the_plans = g.db.query(database.Plan).all()
+   r = make_response()
+   r.status_code = 200
+   r.headers['Content-type'] = 'application/json'
+   r.data = json.dumps([{'state': p.state,
+                    'company': p.company.name,
+                    'plan': p.name}
+                     for p in the_plans])
+   return r
 
 def company_by_name(session, name):
     company = session.query(database.Company).filter(database.Company.name == name).all()
