@@ -1,4 +1,4 @@
-transHealthApp.controller('sharePlanController', function($scope, $location, $http){
+transHealthApp.controller('sharePlanController', function($scope, $location, $http, $modal){
 	$scope.err = false;
 
 	$scope.state = '';
@@ -52,6 +52,11 @@ transHealthApp.controller('sharePlanController', function($scope, $location, $ht
 		}
 
 		postCoverage(coverage_report)
+			.success(function(resp){console.log("Success!")})
+			.error(function(resp, err, data){
+				$scope.open()
+			})
+
 	}
 
 	// this should be a service
@@ -59,4 +64,45 @@ transHealthApp.controller('sharePlanController', function($scope, $location, $ht
 		console.log(payload)
 		return $http.post('/api/v1/coverage', payload)
 	}
+
+	// modal stuff
+
+	  $scope.animationsEnabled = true;
+
+  $scope.open = function (size) {
+
+    var modalInstance = $modal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+    });
+  };
+
+});
+
+transHealthApp.controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+
+  $scope.items = items;
+  $scope.selected = {
+    item: 'foo'
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close();
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
 });

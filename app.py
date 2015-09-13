@@ -54,16 +54,31 @@ def js(path):
 def post_experience():
     data = request.get_json()
     # need to look up plan and company
+    company = company_by_name(g.db, data['company'])
+    if company is None:
+        g.db.add(database.Company(name=data['company']))
+        g.db.commit()
     plan = plan_by_company_name(g.db,
                                 data['company'],
                                 data['plan'],
                                 data['state'])
+    company = company_by_name(g.db, data['company'])
+    if plan is None:
+        g.db.add(database.Plan(company=company,
+                               name=data['name'],
+                               state=data['state'],
+                               medicaid=False))
+        g.db.commit()
+    plan = plan_by_company_name(g.db,
+                            data['company'],
+                            data['plan'],
+                            data['state'])
 
     def make_experience (service_data):
         return database.Experience(
                     date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
                     plan=plan,
-                    documented_gender=data['gender'],
+                    documented_gender='unknown',
                     service=service_data['name'],
                     success=service_data['success'],
                     age=data['age'])
@@ -96,27 +111,6 @@ def post_coverage():
     g.db.add_all(coverage_reports)
     g.db.commit()
     return build_response()
-
-# @app.route('/api/v1/plan', methods=['POST'])
-# def post_plan():
-#     data = request.get_json()
-#     # check if the plan exists
-#     add = True
-#     if add:
-#         # lookup company
-#         company = company_by_name(data['company'])
-#         if company is None:
-#             # add the company
-#             g.db.add(database.Company(name=name))
-#             plan = database.Plan(state=data['state'],
-#                                  type=data['type'],
-#                                  exclusions=data['exclusions'],
-#                                  company=company)
-#             g.db.add(plan)
-#             g.db.commit()
-#     r = make_response()
-#     r.status_code = 200
-#     return r
 
 @app.route('/api/v1/search')
 def search_plan():
@@ -160,7 +154,9 @@ def company_by_name(session, name):
 
 def plan_by_company_name(session, company_name, plan_name, state):
     company = company_by_name(session, company_name)
-    plan = [p for p in company.plans if p.state == state
+    plan = None
+    if company is not None:
+        plan = [p for p in company.plans if p.state == state
             and p.name == plan_name][0]
     return plan
 
