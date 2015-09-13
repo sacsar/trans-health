@@ -32,16 +32,18 @@ def post_experience():
                                 data['company'],
                                 data['plan'],
                                 data['state'])
+
+    def make_experience (service_data):
+        return database.Experience(
+                    date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
+                    plan=plan,
+                    documented_gender=data['gender'],
+                    service=service_data['name'],
+                    success=service_data['success'],
+                    age=data['age'])
+
     # there may be multiple services in one request
-    experiences = []
-    for service in data['services']:
-        experience = database.Experience(date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
-                                         plan=plan,
-                                         documented_gender=data['gender'],
-                                         service=service['name'],
-                                         success=service['success'],
-                                         age=data['age'])
-        experiences.append(experience)
+    experiences = [make_experience(service_data) for service_data in data['services']]
     g.db.add_all(experiences)
     g.db.commit()
     r = make_response()
@@ -56,14 +58,17 @@ def post_coverage():
                                 data['company'],
                                 data['plan'],
                                 data['state'])
+
+    def make_coverage (service_type_data):
+        return database.CoverageStatement(
+                    date=datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
+                    plan=plan,
+                    service_type=service_type_data['name'],
+                    covered=service_type_data['covered'])
+
     # there may be multiple service_types in one request
-    coverage_reports = []
-    for service_type in data['service_types']:
-        coverage =  database.CoverageStatement(date = datetime.datetime.strptime(data['date'], '%Y-%m-%d'),
-                                               plan = plan,
-                                               service_type = service_type['name'],
-                                               covered = service_type['covered'])
-        coverage_reports.append(coverage)
+    coverage_reports = [make_coverage(service_type_data)
+                        for service_type_data in data['service_types']]
     g.db.add_all(coverage_reports)
     g.db.commit()
     r = make_response()
