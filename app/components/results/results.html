@@ -32,7 +32,7 @@
             </div>
             <div class="results-categories--header">
                 <div class="col-xs-4 col-sm-3">
-                    <h5>Hormones</h5>
+                    <h5>Medication</h5>
                 </div>
 
                 <div class="col-xs-4 col-sm-3">
@@ -45,15 +45,17 @@
             </div>
             <div class="results-categories--numbers">
                 <div class="col-xs-4 col-sm-3">
-                    <p class="lead">{{ result.coverage.hormones.yes / result.coverage.count | percentage }}</p>
+                    <p class="lead" data-ng-if="result.coverage.medication.yes + result.coverage.medication.no > 0">{{ result.coverage.medication.yes / (result.coverage.medication.yes + result.coverage.medication.no) | percentage }}</p>
+                    <p class="lead" data-ng-if="result.coverage.medication.yes + result.coverage.medication.no == 0"> - </p>
                 </div>
 
                 <div class="col-xs-4 col-sm-3">
-                    <p class="lead">{{ result.coverage.surgery.yes / result.coverage.count | percentage }}</p>
+                    <p class="lead" data-ng-if="result.coverage.surgery.yes + result.coverage.surgery.no > 0">{{ result.coverage.surgery.yes / (result.coverage.surgery.yes + result.coverage.surgery.no) | percentage }}</p>
+                    <p class="lead" data-ng-if="result.covreage.surgery.yes + result.coverage.surgery.no == 0"> - </p>
                 </div>
 
                 <div class="col-xs-4 col-sm-3">
-                    <p class="lead">{{ result.coverage.count }}</p>
+                    <p class="lead">{{ result.coverage.medication.yes + result.coverage.medication.no + result.coverage.medication.unknown }}</p>
                 </div>
             </div>
         </div>
